@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
+    <ProjectReference Include="..\GigaCore.Data\GigaComic.Data.csproj" />
+    <ProjectReference Include="..\GigaCore.Infrastructure\GigaCore.Infrastructure.csproj" />
+    <ProjectReference Include="..\GigaCore.Models\GigaComic.Models.csproj" />
+    <ProjectReference Include="..\GigaCore.Modules.GigaChat\GigaComic.Modules.GigaChat.csproj" />
+    <ProjectReference Include="..\GigaCore.Modules.Kandinsky\GigaComic.Modules.Kandinsky.csproj" />
+  </ItemGroup>
+
+</Project>
