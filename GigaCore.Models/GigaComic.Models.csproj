@@ -10,4 +10,8 @@
     <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Responses\" />
+  </ItemGroup>
+
 </Project>
