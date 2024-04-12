@@ -19,7 +19,7 @@ namespace GigaComic.Core.Extensions
         public static void AddApplicationIdentity<TContext>(this IServiceCollection services, Action<IdentityOptions>? setupAction = null)
             where TContext : DbContext
         {
-            // Default Ability configuration
+            // Default configuration
             setupAction ??= options =>
             {
                 options.User.RequireUniqueEmail = true;

@@ -1,21 +1,19 @@
-using System.Text;
 using GigaComic.Authorization;
 using GigaComic.Configurations;
-using GigaComic.Core.Entities;
+using GigaComic.Core.Extensions;
 using GigaComic.Data;
-using GigaComic.Models.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
 
-builder.Services.AddDbContext<AppDbContext>(options => {});
-
-builder.Services.AddIdentity<User, IdentityRole>();
+builder.Services.AddBasePgsqlContext<AppDbContext>(connectionString);
+builder.Services.RegisterInjectableTypesFromAssemblies(typeof(Program), typeof(AppDbContext));
+builder.Services.AddApplicationIdentity<AppDbContext>();
 
 builder.Services
     .AddAuthentication(options =>
