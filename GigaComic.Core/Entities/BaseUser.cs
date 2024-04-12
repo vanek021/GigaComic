@@ -1,6 +1,6 @@
-﻿using GigaComic.Core.Interfaces;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using GigaComic.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
 using IDKEY = System.Int64;
 
 namespace GigaComic.Core.Entities

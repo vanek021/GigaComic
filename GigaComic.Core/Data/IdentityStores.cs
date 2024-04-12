@@ -32,7 +32,7 @@ namespace GigaComic.Core.Data
     public class BaseSignInManager<TUser> : SignInManager<TUser> where TUser : class
     {
         public BaseSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory, IOptions<IdentityOptions> optionsAccessor, ILogger<BaseSignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation)
-            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes)
+            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
         {
         }
     }

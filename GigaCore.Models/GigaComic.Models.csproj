@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Responses\**" />
+    <EmbeddedResource Remove="Responses\**" />
+    <None Remove="Responses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
   </ItemGroup>
 
