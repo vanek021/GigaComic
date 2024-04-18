@@ -16,11 +16,13 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly AuthConfiguration _authConfiguration;
 
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, AuthConfiguration authConfiguration)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _authConfiguration = authConfiguration;
     }
 
     [Route("register")]
@@ -69,11 +71,11 @@ public class AuthController : ControllerBase
 
     private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
     {
-        var authSigningKey = AuthConfiguration.GetSymmetricSecurityKey();
+        var authSigningKey = _authConfiguration.GetSymmetricSecurityKey();
 
         var token = new JwtSecurityToken(
-            AuthConfiguration.ISSUER,
-            AuthConfiguration.AUDIENCE,
+            _authConfiguration.Issuer,
+            _authConfiguration.Audience,
             expires: DateTime.Now.AddHours(12),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)

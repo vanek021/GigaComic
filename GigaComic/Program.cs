@@ -9,7 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+var secretKey = builder.Configuration["JWT:SECRET_KEY"];
+var authConfiguration = new AuthConfiguration(secretKey);
+builder.Services.AddSingleton(authConfiguration);
 
 builder.Services.AddBasePgsqlContext<AppDbContext>(connectionString);
 builder.Services.RegisterInjectableTypesFromAssemblies(typeof(Program), typeof(AppDbContext));
@@ -18,7 +22,7 @@ builder.Services.AddApplicationIdentity<AppDbContext>();
 builder.Services
     .AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultAuthenticateScheme = authConfiguration.SessionScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     })
@@ -30,11 +34,11 @@ builder.Services
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            ValidAudience = AuthConfiguration.AUDIENCE,
-            ValidIssuer = AuthConfiguration.ISSUER,
-            IssuerSigningKey = AuthConfiguration.GetSymmetricSecurityKey()
+            ValidAudience = authConfiguration.Audience,
+            ValidIssuer = authConfiguration.Issuer,
+            IssuerSigningKey = authConfiguration.GetSymmetricSecurityKey()
         };
-    }).AddScheme<AuthenticationSchemeOptions, AuthHandler>(AuthConfiguration.SessionScheme, _ => { });
+    }).AddScheme<AuthenticationSchemeOptions, AuthHandler>(authConfiguration.SessionScheme, _ => { });
 
 builder.Services.AddControllers();
 

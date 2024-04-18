@@ -1,17 +1,23 @@
 ﻿using System.Text;
+using GigaComic.Core.Attributes;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GigaComic.Configurations;
 
 public class AuthConfiguration
 {
-    public static string ISSUER = "MyAuthServer";
-    public static string AUDIENCE = "MyAuthClient";
+    public readonly string Issuer = "MyAuthServer";
+    public readonly string Audience = "MyAuthClient";
 
-    public static string SessionScheme = "SessionScheme";
+    public readonly string SessionScheme = "SessionScheme";
+
+    public AuthConfiguration(string secretKey)
+    {
+        _key = secretKey;
+    }
     
-    public static SymmetricSecurityKey GetSymmetricSecurityKey() => 
-        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
+    public SymmetricSecurityKey GetSymmetricSecurityKey() => 
+        new (Encoding.UTF8.GetBytes(_key));
     
-    private const string KEY = "mysupersecret_secretsecretsecretkey!123";
+    private readonly string _key;
 }
