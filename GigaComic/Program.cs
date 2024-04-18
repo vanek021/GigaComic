@@ -1,7 +1,9 @@
+using System.Net.Http.Headers;
 using GigaComic.Authorization;
 using GigaComic.Configurations;
 using GigaComic.Core.Extensions;
 using GigaComic.Data;
+using GigaComic.Modules.Kandinsky;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +20,13 @@ builder.Services.AddSingleton(authConfiguration);
 builder.Services.AddBasePgsqlContext<AppDbContext>(connectionString);
 builder.Services.RegisterInjectableTypesFromAssemblies(typeof(Program), typeof(AppDbContext));
 builder.Services.AddApplicationIdentity<AppDbContext>();
+
+builder.Services.AddHttpClient<KandinskyApi>(options =>
+{
+    options.BaseAddress = new Uri(builder.Configuration["Kandinsky:BaseUri"]);
+    options.DefaultRequestHeaders.Add("X-Key", builder.Configuration["Kandinsky:Key"]);
+    options.DefaultRequestHeaders.Add("X-Secret", builder.Configuration["Kandinsky:Secret"]);
+});
 
 builder.Services
     .AddAuthentication(options =>
