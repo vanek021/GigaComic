@@ -1,6 +1,7 @@
 ﻿using GigaComic.Core.Data;
 using GigaComic.Core.Entities;
 using GigaComic.Models.Entities;
+using GigaComic.Models.Entities.Comic;
 using Microsoft.EntityFrameworkCore;
 
 namespace GigaComic.Data
@@ -16,5 +17,9 @@ namespace GigaComic.Data
         {
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Comic> Comics { get; set; }
+        public DbSet<ComicAbstract> ComicAbstracts { get; set; }
+        public DbSet<ComicStory> ComicStories { get; set; }
     }
 }
