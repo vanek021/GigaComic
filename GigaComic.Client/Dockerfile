@@ -7,7 +7,7 @@ EXPOSE 443
 
 # copy csproj and restore as distinct layers
 COPY . .
-RUN find ../ -name '*.csproj' -exec dotnet restore {} \;
+RUN find .. -name '*.csproj' -exec dotnet restore {} \;
 
 WORKDIR /source/GigaComic.Client
 RUN dotnet publish -c release -o /app --no-restore
