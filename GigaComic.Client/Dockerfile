@@ -9,7 +9,7 @@ EXPOSE 443
 COPY . .
 RUN find . -name '*.csproj' -exec dotnet restore {} \;
 
-WORKDIR /source/GigaComic
+WORKDIR /source/GigaComic.Client
 RUN dotnet publish -c release -o /app --no-restore
 
 # final stage/image
