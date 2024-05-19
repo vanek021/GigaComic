@@ -37,7 +37,7 @@ namespace GigaComic.Services
             return Get().Single(filter);
         }
 
-        public virtual T Get(params object[] primaryKey)
+        public virtual T? Get(params object[] primaryKey)
         {
             return DbSet.Find(primaryKey);
         }

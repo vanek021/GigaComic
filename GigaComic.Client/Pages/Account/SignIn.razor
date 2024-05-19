@@ -1,0 +1,120 @@
+﻿@page "/account/signin"
+
+@using GigaComic.Client.Managers.Account
+@using GigaComic.Shared.Requests.Account
+@using GigaComic.Shared.Responses
+
+@attribute [AllowAnonymous]
+
+@inject IAccountManager accountManager
+@inject NavigationManager navManager
+
+<PageTitle>Авторизация</PageTitle>
+
+<main class="page page__bg-gray">
+    <div class="content">
+        <div class="d-flex">
+            <div class="logon-form">
+                <h3 class="logon-form__title">Войти</h3>
+                <div class="form --logon-form">
+                    <EditForm Model="SignInRequestModel" OnValidSubmit="SubmitSignIn">
+                        <DataAnnotationsValidator />
+
+                        <div class="form__group">
+                            <label class="form__label">Имя пользователя</label>
+                            <InputText @bind-Value="SignInRequestModel.Username" />
+                            <ValidationMessage For="@(() => SignInRequestModel.Username)" />
+                        </div>
+
+                        <div class="form__group">
+                            <label class="form__label">Пароль</label>
+                            <InputText type="password" @bind-Value="SignInRequestModel.Password" />
+                            <ValidationMessage For="@(() => SignInRequestModel.Password)" />
+                        </div>
+
+                        <ModelError Model="_signInResult" />
+
+                        <div class="form__buttons">
+                            <ButtonWithLoader @ref="_signInBtn" Text="Войти" />
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+            <div class="vertical-hr">
+            </div>
+            <div class="logon-form">
+                <h3 class="logon-form__title">Зарегистрироваться</h3>
+                <div class="form --logon-form">
+                    <EditForm Model="RegisterRequestModel" OnValidSubmit="SubmitRegister">
+                        <DataAnnotationsValidator />
+
+                        <div class="form__group">
+                            <label class="form__label">Имя пользователя</label>
+                            <InputText @bind-Value="RegisterRequestModel.Username" />
+                            <ValidationMessage For="@(() => RegisterRequestModel.Username)" />
+                        </div>
+
+                        <div class="form__group">
+                            <label class="form__label">Адрес эл. почты</label>
+                            <InputText @bind-Value="RegisterRequestModel.Email" />
+                            <ValidationMessage For="@(() => RegisterRequestModel.Email)" />
+                        </div>
+
+                        <div class="form__group">
+                            <label class="form__label">Пароль</label>
+                            <InputText type="password" @bind-Value="RegisterRequestModel.Password" />
+                            <ValidationMessage For="@(() => RegisterRequestModel.Password)" />
+                        </div>
+
+                        <div class="form__group">
+                            <label class="form__label">Повторите пароль</label>
+                            <InputText type="password" @bind-Value="RegisterRequestModel.RepeatPassword" />
+                            <ValidationMessage For="@(() => RegisterRequestModel.RepeatPassword)" />
+                        </div>
+
+                        <ModelError Model="_registerResult" />
+
+                        <div class="form__buttons">
+                            <ButtonWithLoader @ref="_registerBtn" Text="Зарегистрироваться" />
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@code {
+    private SignInRequest SignInRequestModel { get; set; } = new();
+    private RegisterRequest RegisterRequestModel { get; set; } = new();
+
+    private IResult? _signInResult;
+    private IResult? _registerResult;
+
+    private ButtonWithLoader? _signInBtn;
+    private ButtonWithLoader? _registerBtn;
+
+    private async Task SubmitSignIn()
+    {
+        _signInBtn?.MarkAsLoading();
+
+        _signInResult = await accountManager.SignInAsync(SignInRequestModel);
+
+        if (_signInResult.Succeeded)
+            navManager.NavigateTo("/", false);
+
+        _signInBtn?.MarkAsDefault();
+    }
+
+    private async Task SubmitRegister()
+    {
+        _registerBtn?.MarkAsLoading();
+
+        _registerResult = await accountManager.RegisterAsync(RegisterRequestModel);
+
+        if (_registerResult.Succeeded)
+            navManager.NavigateTo("/", false);
+
+        _registerBtn?.MarkAsDefault();
+    }
+}

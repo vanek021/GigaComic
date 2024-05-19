@@ -2,8 +2,7 @@
 
 namespace GigaComic.Controllers
 {
-    [ApiController]
-    public class ComicController : Controller
+    public class ComicController : BaseApiController
     {
 
     }

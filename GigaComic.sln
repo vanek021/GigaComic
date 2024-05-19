@@ -5,17 +5,21 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic", "GigaComic\GigaComic.csproj", "{B1A0A635-521C-46AD-A7AF-60A2B840740E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaComic.Core", "GigaComic.Core\GigaComic.Core.csproj", "{F23DEDCD-848A-42F0-9E6C-BD9E1EAB82C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Core", "GigaComic.Core\GigaComic.Core.csproj", "{F23DEDCD-848A-42F0-9E6C-BD9E1EAB82C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaComic.Models", "GigaCore.Models\GigaComic.Models.csproj", "{EB6C03EF-0DC0-4982-8688-E7A3D6008FB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Models", "GigaCore.Models\GigaComic.Models.csproj", "{EB6C03EF-0DC0-4982-8688-E7A3D6008FB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaComic.Data", "GigaCore.Data\GigaComic.Data.csproj", "{530EFE33-22E1-4568-82F4-3066044B804C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Data", "GigaCore.Data\GigaComic.Data.csproj", "{530EFE33-22E1-4568-82F4-3066044B804C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaCore.Infrastructure", "GigaCore.Infrastructure\GigaCore.Infrastructure.csproj", "{9FA52506-B63E-4050-8798-0A98D0C91912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaCore.Infrastructure", "GigaCore.Infrastructure\GigaCore.Infrastructure.csproj", "{9FA52506-B63E-4050-8798-0A98D0C91912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaComic.Modules.Kandinsky", "GigaCore.Modules.Kandinsky\GigaComic.Modules.Kandinsky.csproj", "{E3E778A2-E329-428E-864A-4DF7F5050E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Modules.Kandinsky", "GigaCore.Modules.Kandinsky\GigaComic.Modules.Kandinsky.csproj", "{E3E778A2-E329-428E-864A-4DF7F5050E35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaComic.Modules.GigaChat", "GigaCore.Modules.GigaChat\GigaComic.Modules.GigaChat.csproj", "{AAA609F3-BEF1-42F6-BCF4-E7311D46E3F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Modules.GigaChat", "GigaCore.Modules.GigaChat\GigaComic.Modules.GigaChat.csproj", "{AAA609F3-BEF1-42F6-BCF4-E7311D46E3F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Client", "GigaComic.Client\GigaComic.Client.csproj", "{90AE11EC-C0DD-4CE9-A093-6E08C797C613}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Shared", "GigaComic.Shared\GigaComic.Shared.csproj", "{93297560-EB5C-4DFD-BCA9-64FCF3AF4F4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{AAA609F3-BEF1-42F6-BCF4-E7311D46E3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAA609F3-BEF1-42F6-BCF4-E7311D46E3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAA609F3-BEF1-42F6-BCF4-E7311D46E3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90AE11EC-C0DD-4CE9-A093-6E08C797C613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90AE11EC-C0DD-4CE9-A093-6E08C797C613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90AE11EC-C0DD-4CE9-A093-6E08C797C613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90AE11EC-C0DD-4CE9-A093-6E08C797C613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93297560-EB5C-4DFD-BCA9-64FCF3AF4F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93297560-EB5C-4DFD-BCA9-64FCF3AF4F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93297560-EB5C-4DFD-BCA9-64FCF3AF4F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93297560-EB5C-4DFD-BCA9-64FCF3AF4F4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

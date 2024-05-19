@@ -1,0 +1,52 @@
+﻿@using GigaComic.Client.Managers.Account
+
+@inject IAccountManager accountManager
+@inject NavigationManager navManager
+
+<div class="navigation @NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="menu">
+        <NavLink class="menu__item" href="" Match="NavLinkMatch.All">
+            Создать комикс
+        </NavLink>
+        <NavLink class="menu__item" href="history">
+            История
+        </NavLink>
+    </nav>
+
+    <AuthorizeView>
+        <Authorized>
+            <div class="logon">
+                <a class="logon-button" @onclick="LogOut">Выйти</a>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="logon">
+                <a class="logon-button" href="/account/signin">Войти</a>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+
+</div>
+
+<div class="hamburger" @onclick="ToggleNavMenu">
+    <svg class="svg-icon icon-hamburger">
+        <use xlink:href="#hamburger"></use>
+    </svg>
+</div>
+
+@code {
+    private bool _collapseNavMenu = true;
+
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : "menu-open";
+
+    private void ToggleNavMenu()
+    {
+        _collapseNavMenu = !_collapseNavMenu;
+    }
+
+    private async Task LogOut()
+    {
+        await accountManager.SignOutAsync();
+        navManager.NavigateTo("/account/signin");
+    }
+}

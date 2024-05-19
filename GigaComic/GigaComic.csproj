@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
+    <ProjectReference Include="..\GigaComic.Shared\GigaComic.Shared.csproj" />
     <ProjectReference Include="..\GigaCore.Data\GigaComic.Data.csproj" />
     <ProjectReference Include="..\GigaCore.Infrastructure\GigaCore.Infrastructure.csproj" />
     <ProjectReference Include="..\GigaCore.Models\GigaComic.Models.csproj" />
@@ -22,6 +23,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1" />
   </ItemGroup>
 
 </Project>

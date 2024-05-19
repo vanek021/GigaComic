@@ -1,0 +1,97 @@
+<svg id="Группа_1" data-name="Группа 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="149.5" height="50" viewBox="0 0 149.5 50">
+  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""/>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?></metadata>
+<defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-1 {
+        filter: url(#filter);
+      }
+
+      .cls-2 {
+        filter: url(#filter-2);
+      }
+
+      .cls-3, .cls-4 {
+        stroke: #000;
+        stroke-linejoin: round;
+        stroke-width: 1px;
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        filter: url(#filter-3);
+      }
+
+      .cls-4 {
+        filter: url(#filter-4);
+      }
+
+      .cls-5 {
+        font-size: 35.373px;
+        text-anchor: middle;
+        font-family: "Microsoft Sans Serif";
+      }
+    </style>
+    <filter id="filter" x="139.5" y="41" width="9" height="9" filterUnits="userSpaceOnUse">
+      <feFlood result="flood"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-2" x="0.5" y="0" width="9" height="9" filterUnits="userSpaceOnUse">
+      <feFlood result="flood"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-3" x="110" y="88" width="133" height="2" filterUnits="userSpaceOnUse">
+      <feFlood result="flood"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-4" x="125" y="46" width="133" height="2" filterUnits="userSpaceOnUse">
+      <feFlood result="flood"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <circle id="Эллипс_1_копия" data-name="Эллипс 1 копия" class="cls-1" cx="144" cy="45.5" r="4.5"/>
+  <circle id="Эллипс_1_копия_2" data-name="Эллипс 1 копия 2" class="cls-2" cx="5" cy="4.5" r="4.5"/>
+  <g transform="translate(-109.5 -43)" style="fill: #fff; filter: url(#filter-3)">
+    <path id="Фигура_1_копия_2" data-name="Фигура 1 копия 2" class="cls-3" d="M110,90.011V88H243v2.01H110Z" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use transform="translate(-109.5 -43)" xlink:href="#Фигура_1_копия_2" style="stroke: #000; filter: none; fill: none"/>
+  <g transform="translate(-109.5 -43)" style="fill: #fff; filter: url(#filter-4)">
+    <path id="Фигура_1_копия_3" data-name="Фигура 1 копия 3" class="cls-4" d="M125,48.011V46H258v2.01H125Z" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use transform="translate(-109.5 -43)" xlink:href="#Фигура_1_копия_3" style="stroke: #000; filter: none; fill: none"/>
+  <text id="GigaComic" class="cls-5" transform="translate(74.653 35.101) scale(0.847 0.848)">GigaComic</text>
+</svg>

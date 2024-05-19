@@ -1,0 +1,14 @@
+﻿@using GigaComic.Shared.Responses
+
+@if (Model != null && Model.Messages.Any())
+{
+    @foreach (var message in Model.Messages)
+    {
+        <div class="validation-message">@message</div>
+    }
+}
+
+@code {
+    [Parameter]
+    public IResult Model { get; set; }
+}

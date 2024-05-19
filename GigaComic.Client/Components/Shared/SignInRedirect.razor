@@ -1,0 +1,12 @@
+﻿@attribute [AllowAnonymous]
+
+@inject NavigationManager navManager
+
+@code {
+
+    protected override Task OnInitializedAsync()
+    {
+        navManager.NavigateTo("/account/signin", false);
+        return base.OnInitializedAsync();
+    }
+}

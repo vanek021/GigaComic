@@ -1,0 +1,99 @@
+﻿<button class="@_btnClass" disabled="@_btnDisabled" style="@btnStyle" type="@Type" @onclick="OnClickCallback">
+    <span class="@GetSpanClass()">
+        @Text @(LoadingPercent.HasValue ? $"({LoadingPercent.Value} %)" : "")
+    </span>
+    <span style="@(!HideTextWhenLoading ? "margin-left: 6px;" : "")" class="@GetImgClass()"><span class="loader"></span></span>
+</button>
+
+@code {
+    [Parameter]
+    public string? Text { get; set; }
+
+    [Parameter]
+    public BtnColor Color { get; set; }
+
+    [Parameter]
+    public int? Width { get; set; }
+
+    [Parameter]
+    public int? Height { get; set; }
+
+    [Parameter]
+    public string Type { get; set; } = "submit";
+
+    [Parameter]
+    public bool HideTextWhenLoading { get; set; } = true;
+
+    [Parameter]
+    public EventCallback OnClickCallback { get; set; }
+
+    [Parameter]
+    public int? LoadingPercent { get; set; }
+
+    private string btnDefaultClass => $"button --default-button --{Color.ToString().ToLower()}";
+    private string btnLoadingClass => $"button --default-button --{Color.ToString().ToLower()} --loading";
+    private string btnStyle => Width.HasValue && Height.HasValue ? $"width: {Width}px; height: {Height}px; line-height: 10px;" : "";
+
+    private string _btnClass = string.Empty;
+    private bool _btnDisabled = false;
+    private bool _isLoading = false;
+
+    private string GetSpanClass() =>
+        HideTextWhenLoading ? "button__text-hideable" : "button__text";
+
+    private string GetImgClass() =>
+        !HideTextWhenLoading ? "button__loader" : "button__loader-absolute";
+
+    protected override Task OnInitializedAsync()
+    {
+        _btnClass = btnDefaultClass;
+        return base.OnInitializedAsync();
+    }
+
+    public void MarkAsLoading()
+    {
+        _btnClass = btnLoadingClass;
+        _isLoading = true;
+        StateHasChanged();
+    }
+
+    public void MarkAsDefault()
+    {
+        _btnClass = btnDefaultClass;
+        _isLoading = false;
+        StateHasChanged();
+    }
+
+    public async Task OnClick()
+    {
+        if (OnClickCallback.HasDelegate)
+            await OnClickCallback.InvokeAsync();
+    }
+
+    public void ChangeText(string text)
+    {
+        Text = text;
+        StateHasChanged();
+    }
+
+    public void ChangeColor(BtnColor color)
+    {
+        Color = color;
+        StateHasChanged();
+    }
+
+    public void ChangePercent(int? percent)
+    {
+        LoadingPercent = percent;
+        StateHasChanged();
+    }
+
+    public enum BtnColor
+    {
+        Green,
+        Black,
+        Red,
+        Orange,
+        Blue
+    }
+}
