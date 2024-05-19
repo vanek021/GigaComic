@@ -7,7 +7,7 @@ services:
     ports:
       - "1300:3000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Stage
       - ASPNETCORE_URLS=http://+:3000
   frontend:
     build: 
@@ -16,5 +16,5 @@ services:
     ports:
       - "1400:3000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Stage
       - ASPNETCORE_URLS=http://+:3000
