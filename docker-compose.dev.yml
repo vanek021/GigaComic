@@ -1,20 +1,21 @@
-version: '3'
+version: '3.8'
 services:
   backend:
-    build: 
+    build:
       context: '.'
-      dockerfile: 'GigaComic/Dockerfile'
+      dockerfile: GigaComic/Dockerfile
     ports:
-      - "1300:3000"
+      - "8081:3000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Stage
       - ASPNETCORE_URLS=http://+:3000
+
   frontend:
-    build: 
+    build:
       context: '.'
-      dockerfile: 'GigaComic.Client/Dockerfile'
+      dockerfile: GigaComic.Client/Dockerfile
     ports:
-      - "1400:3000"
+      - "8082:3000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Stage
       - ASPNETCORE_URLS=http://+:3000

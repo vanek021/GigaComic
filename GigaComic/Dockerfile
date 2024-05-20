@@ -1,19 +1,28 @@
-# https://hub.docker.com/_/microsoft-dotnet
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /source
-
-EXPOSE 80
-EXPOSE 443
-
-# copy csproj and restore as distinct layers
-COPY . .
-RUN find .. -name '*.csproj' -exec dotnet restore {} \;
-
-WORKDIR /source/GigaComic
-RUN dotnet publish -c release -o /app --no-restore
-
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-COPY --from=build /app ./
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY ["GigaComic/GigaComic.csproj", "GigaComic/"]
+COPY ["GigaComic.Core/GigaComic.Core.csproj", "GigaComic.Core/"]
+COPY ["GigaComic.Data/GigaComic.Data.csproj", "GigaComic.Data/"]
+COPY ["GigaComic.Infrastructure/GigaComic.Infrastructure.csproj", "GigaComic.Infrastructure/"]
+COPY ["GigaComic.Models/GigaComic.Models.csproj", "GigaComic.Models/"]
+COPY ["GigaComic.Shared/GigaComic.Shared.csproj", "GigaComic.Shared/"]
+COPY ["GigaComic.Modules.GigaChat/GigaComic.Modules.GigaChat.csproj", "GigaComic.Modules.GigaChat/"]
+COPY ["GigaComic.Modules.GigaChat/GigaComic.Modules.Kandinsky.csproj", "GigaComic.Modules.Kandinsky/"]
+
+RUN dotnet restore "GigaComic/GigaComic.csproj"
+COPY . .
+WORKDIR "/src/GigaComic"
+RUN dotnet build "GigaComic.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "GigaComic.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "GigaComic.dll"]
