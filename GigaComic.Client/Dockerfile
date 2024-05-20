@@ -14,7 +14,7 @@ COPY ["GigaComic.Shared/GigaComic.Shared.csproj", "GigaComic.Shared/"]
 COPY ["GigaComic.Modules.GigaChat/GigaComic.Modules.GigaChat.csproj", "GigaComic.Modules.GigaChat/"]
 COPY ["GigaComic.Modules.Kandinsky/GigaComic.Modules.Kandinsky.csproj", "GigaComic.Modules.Kandinsky/"]
 
-RUN dotnet restore "GigaComic/GigaComic.Client.csproj"
+RUN dotnet restore "GigaComic.Client/GigaComic.Client.csproj"
 COPY . .
 WORKDIR "/src/GigaComic.Client"
 RUN dotnet build "GigaComic.Client.csproj" -c Release -o /app/build
