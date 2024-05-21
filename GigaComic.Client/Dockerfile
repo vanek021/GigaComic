@@ -26,9 +26,11 @@ RUN dotnet publish "GigaComic.Client.csproj" -c Release --no-restore -o /app/pub
 
 FROM nginx:alpine AS final
 WORKDIR /usr/share/nginx/html
-COPY --from=publish /app/publish/wwwroot .
+COPY --from=build /app/publish/wwwroot .
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
+EXPOSE 443
+
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
