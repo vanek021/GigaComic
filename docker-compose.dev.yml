@@ -15,7 +15,8 @@ services:
       context: '.'
       dockerfile: GigaComic.Client/Dockerfile
     ports:
-      - "8082:3000"
+      - "80:80"
+      - "443:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Stage
-      - ASPNETCORE_URLS=http://+:3000
+      - ASPNETCORE_URLS=https://+:443;http://+:80
