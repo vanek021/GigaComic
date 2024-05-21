@@ -19,7 +19,7 @@ COPY ["GigaComic.Modules.Kandinsky/GigaComic.Modules.Kandinsky.csproj", "GigaCom
 COPY . .
 WORKDIR "/src/GigaComic.Client"
 
-RUN sudo apt update && sudo apt install python -y
+RUN apt update && apt install python -y
 RUN dotnet workload restore GigaComic.Client.csproj
 RUN dotnet restore "GigaComic.Client.csproj"
 RUN dotnet publish "GigaComic.Client.csproj" -c Release --no-restore -o /app/publish
