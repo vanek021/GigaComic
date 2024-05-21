@@ -19,12 +19,12 @@ RUN dotnet restore "GigaComic.Client/GigaComic.Client.csproj"
 
 COPY . .
 WORKDIR "/src/GigaComic.Client"
-RUN dotnet build "GigaComic.Client.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "GigaComic.Client.csproj" -c Release -o /app/publish
+RUN dotnet publish "GigaComic.Client.csproj" -c Release --no-restore -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "GigaComic.Client.dll"]
+
+COPY --from=build /app/publish .
+
+ENTRYPOINT ["dotnet", "FSH.BlazorWebAssembly.Host.dll"]
