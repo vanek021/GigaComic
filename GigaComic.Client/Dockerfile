@@ -17,7 +17,7 @@ COPY ["GigaComic.Modules.Kandinsky/GigaComic.Modules.Kandinsky.csproj", "GigaCom
 COPY . .
 WORKDIR "/src/GigaComic.Client"
 
-RUN dotnet workload restore [/src/GigaComic.Client/GigaComic.Client.csproj]
+RUN dotnet workload restore GigaComic.Client.csproj
 RUN dotnet publish "GigaComic.Client.csproj" -c Release --no-restore -o /app/publish
 
 FROM base AS final
