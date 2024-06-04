@@ -1,5 +1,52 @@
-﻿<h3>CreateTheses</h3>
+﻿@using GigaComic.Shared.Responses.Comic
 
+<EditForm OnValidSubmit="OnContinue">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <h2 class="content__title">Выберите тезисы, которые мы придумали для вас:</h2>
+
+    <div class="abstracts__container">
+        @foreach (var comicAbstract in ComicResponseModel!.OrderedActiveAbstracts)
+        {
+            <div>@comicAbstract.Name</div>
+        }
+    </div>
+
+    <div class="abstracts__list">
+        @foreach (var comicAbstract in ComicResponseModel!.NotActiveAbstracts)
+        {
+            <div>@comicAbstract.Name</div>
+        }
+    </div>
+
+    <div class="abstracts__actions">
+        <Button Type="button">Добавить тезис</Button>
+        <ButtonWithLoader Type="submit"
+                          Text="Продолжить"
+                          Width="148"
+                          Height="48"
+                          Color="ButtonWithLoader.BtnColor.Black" />
+    </div>
+
+</EditForm>
 @code {
+    [Parameter]
+    public ComicResponse? ComicResponseModel { get; set; }
 
+    [Parameter]
+    public EventCallback OnContinueCallback { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (ComicResponseModel!.Stage != Models.Enums.ComicStage.AbstractsCreation)
+            throw new ArgumentException();
+
+        return base.OnInitializedAsync();
+    }
+
+    private async Task OnContinue()
+    {
+        await OnContinueCallback.InvokeAsync();
+    }
 }

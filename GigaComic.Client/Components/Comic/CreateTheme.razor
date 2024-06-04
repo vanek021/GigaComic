@@ -1,13 +1,28 @@
 ﻿@using GigaComic.Shared.Requests.Comic
-<h2>Давайте придумаем тему комикса</h2>
+
+<h2 class="content__title">Давайте придумаем тему комикса</h2>
 
 <EditForm Model="CreateComicRequestModel" OnValidSubmit="OnContinue">
     <DataAnnotationsValidator />
 
-    <Input @bind-Value="CreateComicRequestModel!.Theme" TValue="string" />
-    <ValidationMessage For="@(() => CreateComicRequestModel.Theme)" />
+    <div class="d-flex justify-content-center" style="width: 100%; margin: 0 auto;">
 
-    <ButtonWithLoader Type="submit" Text="Продолжить" Color="ButtonWithLoader.BtnColor.Black" />
+        <div style="width: 60%;">
+            <Input Style="height: 48px;"
+                   Class="theme__input"
+                   @bind-Value="CreateComicRequestModel!.Theme"
+                   TValue="string" />
+            <ValidationMessage For="@(() => CreateComicRequestModel.Theme)" />
+        </div>
+
+        <ButtonWithLoader Type="submit"
+                          Text="Продолжить"
+                          Width="148"
+                          Height="48"
+                          Color="ButtonWithLoader.BtnColor.Black" />
+
+    </div>
+
 </EditForm>
 
 @code {

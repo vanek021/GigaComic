@@ -10,5 +10,11 @@ namespace GigaComic.Shared.Responses.Comic
     public class ComicResponse : IResponse
     {
         public ComicStage Stage { get; set; }
+
+        public List<ComicAbstractResponse> ComicAbstracts { get; set; } = new();
+
+        public List<ComicAbstractResponse> OrderedActiveAbstracts => ComicAbstracts.Where(a => a.IsActive).OrderBy(a => a.Order).ToList();
+        public List<ComicAbstractResponse> NotActiveAbstracts => ComicAbstracts.Where(a => !a.IsActive).ToList();
+
     }
 }
