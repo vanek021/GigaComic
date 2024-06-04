@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GigaComic.Core.Internal
 {
-    internal class ReflectionTools
+    public class ReflectionTools
     {
         public static void FindRealContextGenericArgumentsTypes<TContext>(ref Type? userType, ref Type? roleType) where TContext : DbContext
         {
