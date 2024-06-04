@@ -62,6 +62,11 @@ namespace GigaComic.Shared.Responses
         {
             return Task.FromResult(Success(message));
         }
+
+        public string GetMessages()
+        {
+            return string.Join(" ", Messages);
+        }
     }
 
     public class Result<T> : Result, IResult<T>

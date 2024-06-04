@@ -1,0 +1,29 @@
+﻿@using GigaComic.Shared.Responses.Comic
+@using GigaComic.Models.Enums
+
+<h3>ComicView</h3>
+
+@switch (ComicResponseModel.Stage)
+{
+    case ComicStage.AbstractsCreation:
+        <CreateAbstracts />
+        break;
+    case ComicStage.StoriesEditing:
+        <CreateStories />
+        break;
+    case ComicStage.ComicSetup:
+        <ComicSetup />
+        break;
+    case ComicStage.Completed:
+        <ComicResult />
+        break;
+    default:
+        throw new ArgumentException();
+}
+
+
+
+@code {
+    [Parameter]
+    public ComicResponse ComicResponseModel { get; set; }
+}

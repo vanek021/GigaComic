@@ -7,6 +7,8 @@ namespace GigaComic.Shared.Responses
         List<string> Messages { get; set; }
 
         bool Succeeded { get; set; }
+
+        string GetMessages();
     }
 
     public interface IResult<out T> : IResult

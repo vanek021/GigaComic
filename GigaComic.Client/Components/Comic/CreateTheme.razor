@@ -1,0 +1,24 @@
+﻿@using GigaComic.Shared.Requests.Comic
+<h2>Давайте придумаем тему комикса</h2>
+
+<EditForm Model="CreateComicRequestModel" OnValidSubmit="OnContinue">
+    <DataAnnotationsValidator />
+
+    <Input @bind-Value="CreateComicRequestModel!.Theme" TValue="string" />
+    <ValidationMessage For="@(() => CreateComicRequestModel.Theme)" />
+
+    <ButtonWithLoader Type="submit" Text="Продолжить" Color="ButtonWithLoader.BtnColor.Black" />
+</EditForm>
+
+@code {
+    [Parameter]
+    public CreateComicRequest? CreateComicRequestModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnContinueCallback { get; set; }
+
+    private async Task OnContinue()
+    {
+        await OnContinueCallback.InvokeAsync();
+    }
+}
