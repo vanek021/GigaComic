@@ -9,6 +9,7 @@ namespace GigaComic.Shared.Responses.Comic
 {
     public class ComicResponse : IResponse
     {
+        public long Id { get; set; }
         public ComicStage Stage { get; set; }
 
         public List<ComicAbstractResponse> ComicAbstracts { get; set; } = new();
