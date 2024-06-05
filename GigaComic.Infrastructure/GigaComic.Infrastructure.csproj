@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GigaCore.Models\GigaComic.Models.csproj" />
+    <ProjectReference Include="..\GigaComic.Models\GigaComic.Models.csproj" />
   </ItemGroup>
 
 </Project>

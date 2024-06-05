@@ -9,11 +9,11 @@
   <ItemGroup>
     <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
     <ProjectReference Include="..\GigaComic.Shared\GigaComic.Shared.csproj" />
-    <ProjectReference Include="..\GigaCore.Data\GigaComic.Data.csproj" />
-    <ProjectReference Include="..\GigaCore.Infrastructure\GigaCore.Infrastructure.csproj" />
-    <ProjectReference Include="..\GigaCore.Models\GigaComic.Models.csproj" />
-    <ProjectReference Include="..\GigaCore.Modules.GigaChat\GigaComic.Modules.GigaChat.csproj" />
-    <ProjectReference Include="..\GigaCore.Modules.Kandinsky\GigaComic.Modules.Kandinsky.csproj" />
+    <ProjectReference Include="..\GigaComic.Data\GigaComic.Data.csproj" />
+    <ProjectReference Include="..\GigaComic.Infrastructure\GigaComic.Infrastructure.csproj" />
+    <ProjectReference Include="..\GigaComic.Models\GigaComic.Models.csproj" />
+    <ProjectReference Include="..\GigaComic.Modules.GigaChat\GigaComic.Modules.GigaChat.csproj" />
+    <ProjectReference Include="..\GigaComic.Modules.Kandinsky\GigaComic.Modules.Kandinsky.csproj" />
   </ItemGroup>
 
   <ItemGroup>
