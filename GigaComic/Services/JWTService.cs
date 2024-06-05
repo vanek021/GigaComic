@@ -37,7 +37,9 @@ namespace GigaComic.Services
                 notBefore: DateTime.Now,
                 claims: claims,
                 expires: expiringAt,
-                signingCredentials: signinCredentials
+                signingCredentials: signinCredentials,
+                issuer: _jwtConfig.Issuer,
+                audience: _jwtConfig.Audience
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);

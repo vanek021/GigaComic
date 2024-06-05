@@ -20,6 +20,5 @@ namespace GigaComic.Data
 
         public DbSet<Comic> Comics { get; set; }
         public DbSet<ComicAbstract> ComicAbstracts { get; set; }
-        public DbSet<ComicStory> ComicStories { get; set; }
     }
 }
