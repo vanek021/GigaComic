@@ -11,7 +11,7 @@ namespace GigaComic.Core.DataAnnotations
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class UniqueAttribute : Attribute
     {
-        internal static void CheckAttribute(ModelBuilder builder, Type entityType, PropertyInfo[] columns)
+        public static void CheckAttribute(ModelBuilder builder, Type entityType, PropertyInfo[] columns)
         {
             foreach (var it in columns)
             {

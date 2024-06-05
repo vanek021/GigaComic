@@ -874,3 +874,17 @@ a.button {
     border-left: 2px solid black;
     height: 400px;
 }
+
+.content__title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    /*color: var(--color-main);*/
+}
+
+.theme__input {
+    height: 100%;
+    line-height: 100% !important;
+}
