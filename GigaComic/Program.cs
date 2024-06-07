@@ -1,6 +1,8 @@
 using GigaComic.Core.Extensions;
 using GigaComic.Data;
 using GigaComic.Extensions;
+using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,32 @@ builder.Services.RegisterInjectableTypesFromAssemblies(typeof(Program), typeof(A
 builder.Services.AddApplicationIdentity<AppDbContext>();
 
 builder.AddGigaComicAuthentication();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }
+            });
+});
 builder.Services.AddControllers();
-builder.Services.AddAppServices();
+builder.Services.AddAppServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -29,6 +54,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GigaGomic"));
 
 app.Run();

@@ -11,7 +11,7 @@ namespace GigaComic.Models.Entities.Comic
 {
     public class Comic : BaseRecord
     {
-        public string Title { get; set; }
+        public string Theme { get; set; }
         public ComicStage Stage { get; set; }
         public ComicStyle Style { get; set; }
         public ComicGrid Grid { get; set; }
@@ -20,6 +20,6 @@ namespace GigaComic.Models.Entities.Comic
         public User User { get; set; }
         public long UserId { get; set; }
 
-        public virtual List<ComicAbstract> ComicAbstracts { get; set; }
+        public virtual ICollection<ComicAbstract> ComicAbstracts { get; set; }
     }
 }

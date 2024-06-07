@@ -18,9 +18,5 @@ namespace GigaComic.Models.Entities.Comic
         [ForeignKey(nameof(ComicId))]
         public Comic Comic { get; set; }
         public long ComicId { get; set; }
-
-        [ForeignKey(nameof(ComicStoryId))]
-        public Comic ComicStory { get; set; }
-        public long ComicStoryId { get; set; }
     }
 }

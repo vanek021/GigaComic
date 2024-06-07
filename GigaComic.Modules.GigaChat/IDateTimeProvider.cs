@@ -3,15 +3,15 @@
     public interface IDateTimeProvider
     {
         DateTime Now { get; }
-        DateTime FromUtcMilliseconds(long seconds);
+        DateTime FromUtcMilliseconds(long milliseconds);
     }
 
     public class DateTimeProvider : IDateTimeProvider
     {
         public DateTime Now => DateTime.Now;
-        DateTime IDateTimeProvider.FromUtcMilliseconds(long seconds)
+        DateTime IDateTimeProvider.FromUtcMilliseconds(long milliseconds)
         {
-            return DateTimeOffset.FromUnixTimeSeconds(seconds).LocalDateTime;
+            return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).LocalDateTime;
         }
     }
 }

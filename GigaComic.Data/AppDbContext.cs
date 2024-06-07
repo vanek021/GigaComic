@@ -3,6 +3,8 @@ using GigaComic.Core.Entities;
 using GigaComic.Models.Entities;
 using GigaComic.Models.Entities.Comic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace GigaComic.Data
 {
@@ -15,7 +17,27 @@ namespace GigaComic.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //builder.Entity<Comic>().HasMany(c => c.ComicAbstracts)
+            //    .WithOne(a => a.Comic)
+            //    .IsRequired();
+
             base.OnModelCreating(builder);
+        }
+
+        public class Factory : IDesignTimeDbContextFactory<AppDbContext>
+        {
+            public AppDbContext CreateDbContext(string[] args)
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(System.IO.Directory.GetCurrentDirectory() + @"\..\GigaComic")
+                    .AddJsonFile("appsettings.Development.json")
+                    .Build();
+
+                var options = new DbContextOptionsBuilder<AppDbContext>()
+                    .UseNpgsql(configuration.GetConnectionString("DefaultConnection")!).Options;
+
+                return new AppDbContext(options);
+            }
         }
 
         public DbSet<Comic> Comics { get; set; }
