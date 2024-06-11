@@ -1,0 +1,86 @@
+﻿@using GigaComic.Shared.Interfaces
+@using GigaComic.Infrastructure.Extensions
+﻿
+@typeparam TItem where TItem : class, IDraggable
+
+<Spin Spinning="isSaveInProcess">
+    <div class="dragdrop d-flex" ondragover="event.preventDefault();">
+        @foreach (var item in Items)
+        {
+            @if (ItemTemplate is not null)
+            {
+                <div class="dragdrop__item" id="@Items.IndexOf(item)">
+                    <div class="dragdrop__item-draggable"
+                         draggable="true"
+                         tabindex="1"
+                         @key="Items.IndexOf(item)"
+                         @ondrop="@(async ()=> await Drop(item))"
+                         @ondrag="@(()=> StartDrag(item))">
+                        @ItemTemplate(item)
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</Spin>
+
+@code {
+    [Parameter]
+    public RenderFragment<TItem>? ItemTemplate { get; set; }
+
+    [Parameter]
+    public List<TItem> Items { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OrderChangedCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<long> DeleteItemCallback { get; set; }
+
+    int currentIndex;
+    bool isSaveInProcess = false;
+
+    void StartDrag(TItem item)
+    {
+        currentIndex = GetIndex(item);
+    }
+
+    void ClickItem(TItem item)
+    {
+        currentIndex = GetIndex(item);
+    }
+
+    int GetIndex(TItem item)
+    {
+        return Items.IndexOf(item);
+    }
+
+    async Task Drop(TItem item)
+    {
+        isSaveInProcess = true;
+        await Task.Run(() => { InvokeAsync(StateHasChanged); });
+
+        if (item != null)
+        {
+            var index = GetIndex(item);
+
+            var current = Items[currentIndex];
+
+            if (index != currentIndex)
+            {
+                Items.Swap(currentIndex, index);
+
+                for (var i = 0; i < Items.Count; i++)
+                    Items[i].Order = i;
+
+                currentIndex = index;
+
+                await OrderChangedCallback.InvokeAsync();
+            }
+
+        }
+
+        isSaveInProcess = false;
+        await Task.Run(() => { InvokeAsync(StateHasChanged); });
+    }
+}

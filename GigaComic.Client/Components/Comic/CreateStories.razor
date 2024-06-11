@@ -1,5 +1,30 @@
-﻿<h3>CreateHistory</h3>
+﻿@using GigaComic.Shared.Responses.Comic
+
+<EditForm OnValidSubmit="OnContinue" Model="ComicResponseModel">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <h2 class="content__title">
+        Отлично! Мы собрали для вас истории по вашим тезисам.
+        <br />
+        Вы можете отредактировать их:
+    </h2>
+
+    <div class="comic-container">
+
+    </div>
+
+</EditForm>
 
 @code {
+    [Parameter]
+    public ComicResponse? ComicResponseModel { get; set; }
 
+    [Parameter]
+    public EventCallback OnContinueCallback { get; set; }
+
+    private async Task OnContinue()
+    {
+        await OnContinueCallback.InvokeAsync();
+    }
 }

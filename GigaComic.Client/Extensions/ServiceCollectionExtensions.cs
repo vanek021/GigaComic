@@ -14,7 +14,8 @@ namespace GigaComic.Client.Extensions
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .Select(t => new
                 {
-                    Service = t.GetInterface($"I{t.Name}"),
+                    Service = t.GetInterfaces()
+                        .SingleOrDefault(x => x.Name != managers.Name && managers.IsAssignableFrom(x)),
                     Implementation = t
                 })
                 .Where(t => t.Service != null);

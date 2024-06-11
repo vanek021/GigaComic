@@ -1,31 +1,45 @@
 ﻿@using GigaComic.Shared.Responses.Comic
 
-<EditForm OnValidSubmit="OnContinue">
+<EditForm OnValidSubmit="OnContinue" Model="ComicResponseModel">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <h2 class="content__title">Выберите тезисы, которые мы придумали для вас:</h2>
 
     <div class="abstracts__container">
-        @foreach (var comicAbstract in ComicResponseModel!.OrderedActiveAbstracts)
+        <DragDrop Items="_orderedActiveAbstracts" Context="item">
+            <ItemTemplate>
+                <div class="abstracts__item">
+                    <div class="close-button" @onclick="(_ => RemoveFromActive(item))">×</div>
+                    <p>@item.Name</p>
+                </div>
+            </ItemTemplate>
+        </DragDrop>
+        @if (!string.IsNullOrEmpty(_error))
         {
-            <div>@comicAbstract.Name</div>
+            <div style="padding-left: 20px;" class="validation-message">@_error</div>
         }
     </div>
 
-    <div class="abstracts__list">
-        @foreach (var comicAbstract in ComicResponseModel!.NotActiveAbstracts)
-        {
-            <div>@comicAbstract.Name</div>
-        }
-    </div>
-
+    @if (_notActiveAbstracts.Any())
+    {
+        <div class="abstracts__list">
+            <p>Кликните на тезис, чтобы перенесети его в область выбора</p>
+            <div class="d-flex abstracts__list-flex">
+                @foreach (var comicAbstract in _notActiveAbstracts)
+                {
+                    <div class="abstracts__item-inactive" @onclick="(_ => AddToActive(comicAbstract))">
+                        <p>@comicAbstract.Name</p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    
     <div class="abstracts__actions">
-        <Button Type="button">Добавить тезис</Button>
+        <Button Class="button --default-button" Type="button">Добавить тезис</Button>
         <ButtonWithLoader Type="submit"
                           Text="Продолжить"
-                          Width="148"
-                          Height="48"
                           Color="ButtonWithLoader.BtnColor.Black" />
     </div>
 
@@ -37,16 +51,58 @@
     [Parameter]
     public EventCallback OnContinueCallback { get; set; }
 
+    private List<ComicAbstractResponse> _orderedActiveAbstracts = new();
+    private List<ComicAbstractResponse> _notActiveAbstracts = new();
+    private string? _error;
+
     protected override Task OnInitializedAsync()
     {
         if (ComicResponseModel!.Stage != Models.Enums.ComicStage.AbstractsCreation)
             throw new ArgumentException();
+
+        _orderedActiveAbstracts = ComicResponseModel.OrderedActiveAbstracts;
+        _notActiveAbstracts = ComicResponseModel.NotActiveAbstracts;
 
         return base.OnInitializedAsync();
     }
 
     private async Task OnContinue()
     {
+        _error = null;
+
+        if (_orderedActiveAbstracts.Count < 3)
+        {
+            _error = "Выберите как минимум 3 тезиса";
+            return;
+        }
+
+        ComicResponseModel!.ComicAbstracts = _orderedActiveAbstracts.Concat(_notActiveAbstracts).ToList();
+
         await OnContinueCallback.InvokeAsync();
+    }
+
+    private void RemoveFromActive(ComicAbstractResponse item)
+    {
+        var toRemoveIndex = _orderedActiveAbstracts.IndexOf(item);
+
+        if (toRemoveIndex > -1)
+        {
+            var toRemove = _orderedActiveAbstracts[toRemoveIndex];
+            toRemove.IsActive = false;
+            toRemove.Order = -1;
+
+            _orderedActiveAbstracts.RemoveAt(toRemoveIndex);
+            _notActiveAbstracts.Add(toRemove);
+        }
+    }
+
+    private void AddToActive(ComicAbstractResponse item)
+    {
+        _notActiveAbstracts.Remove(item);
+
+        item.Order = _orderedActiveAbstracts.Count;
+        item.IsActive = true;
+
+        _orderedActiveAbstracts.Add(item);
     }
 }

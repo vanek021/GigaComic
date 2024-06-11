@@ -1,15 +1,17 @@
-﻿@using GigaComic.Shared.Responses.Comic
+﻿@using GigaComic.Client.Managers.Comic
+@using GigaComic.Shared.Requests.Comic
+@using GigaComic.Shared.Responses.Comic
 @using GigaComic.Models.Enums
 
-<h3>ComicView</h3>
+@inject IComicManager comicManager
 
 @switch (ComicResponseModel.Stage)
 {
     case ComicStage.AbstractsCreation:
-        <CreateAbstracts />
+        <CreateAbstracts ComicResponseModel="ComicResponseModel" OnContinueCallback="CompleteAbstractsCreationAsync" />
         break;
     case ComicStage.StoriesEditing:
-        <CreateStories />
+        <CreateStories ComicResponseModel="ComicResponseModel" />
         break;
     case ComicStage.ComicSetup:
         <ComicSetup />
@@ -26,4 +28,28 @@
 @code {
     [Parameter]
     public ComicResponse ComicResponseModel { get; set; }
+
+    private async Task CompleteAbstractsCreationAsync()
+    {
+        var request = new CompleteAbstractCreationRequest()
+        {
+            ComicId = ComicResponseModel.Id,
+        };
+
+        foreach (var cAbstract in ComicResponseModel.ComicAbstracts)
+        {
+            request.Abstracts.Add(new AbstractRequest()
+            {
+                Id = cAbstract.Id,
+                IsActive = cAbstract.IsActive,
+                Name = cAbstract.Name,
+                Order = cAbstract.Order
+            });
+        }
+
+        var result = await comicManager.CompleteAbstractCreationStageAsync(request);
+
+        ComicResponseModel = result.Data;
+        StateHasChanged();
+    }
 }

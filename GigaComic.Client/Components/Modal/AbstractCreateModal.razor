@@ -1,0 +1,11 @@
+﻿@using GigaComic.Shared.Responses.Comic
+
+@inherits BaseModal
+
+<ConfirmationModal @ref="_confirmationModal">
+    <Input @bind-Value="_newAbstract.Name" />
+</ConfirmationModal>
+
+@code {
+    private ComicAbstractResponse _newAbstract = new();
+}
