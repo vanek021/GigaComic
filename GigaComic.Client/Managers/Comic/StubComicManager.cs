@@ -21,6 +21,15 @@ namespace GigaComic.Client.Managers.Comic
             return result;
         }
 
+        public async Task<IResult<ComicResponse>> CompleteStoriesCreationStageAsync(CompleteStoriesCreationRequest model)
+        {
+            var result = await CompleteAbstractCreationStageAsync(new CompleteAbstractCreationRequest());
+
+            result.Data.Stage = ComicStage.ComicSetup;
+
+            return result;
+        }
+
         public async Task<IResult<ComicResponse>> CreateComicByThemeAsync(CreateComicRequest model)
         {
             return await Task.FromResult<IResult<ComicResponse>>(Result<ComicResponse>.Success(new ComicResponse()

@@ -52,4 +52,28 @@
         ComicResponseModel = result.Data;
         StateHasChanged();
     }
+
+    private async Task CompleteStoriesCreationAsync()
+    {
+        var request = new CompleteStoriesCreationRequest()
+            {
+                ComicId = ComicResponseModel.Id,
+            };
+
+        foreach (var cAbstract in ComicResponseModel.ComicAbstracts)
+        {
+            request.Stories.Add(new StoryRequest()
+            {
+                Id = cAbstract.Id,
+                //IsActive = cAbstract.IsActive,
+                Content = cAbstract.Content!,
+                //Order = cAbstract.Order
+            });
+        }
+
+        var result = await comicManager.CompleteStoriesCreationStageAsync(request);
+
+        ComicResponseModel = result.Data;
+        StateHasChanged();
+    }
 }

@@ -11,7 +11,35 @@
     </h2>
 
     <div class="comic-container">
+        @foreach (var cAbstract in ComicResponseModel!.OrderedActiveAbstracts)
+        {
+            <div class="comic-story">
+                <div class="comic-story__header">
+                    <span class="comic-story__title">
+                        @cAbstract.Name
+                    </span>
+                    <div class="comic-story__actions">
+                        <Button>Редактировать</Button>
+                        <Button>Перегенерировать</Button>
+                    </div>
+                </div>
+                <div class="comic-story__body">
+                    @cAbstract.Content
+                </div>
+            </div>
+        }
 
+        @if (!string.IsNullOrEmpty(_error))
+        {
+            <div class="validation-message">@_error</div>
+        }
+
+        <div class="story__actions">
+            @* <Button Class="button --default-button" Type="button">Добавить тезис</Button> *@
+            <ButtonWithLoader Type="submit"
+                              Text="Продолжить"
+                              Color="ButtonWithLoader.BtnColor.Black" />
+        </div>
     </div>
 
 </EditForm>
@@ -23,8 +51,18 @@
     [Parameter]
     public EventCallback OnContinueCallback { get; set; }
 
+    private string? _error;
+
     private async Task OnContinue()
     {
+        _error = null;
+
+        if (ComicResponseModel!.OrderedActiveAbstracts.Any(x => x.IsActive && string.IsNullOrEmpty(x.Content)))
+        {
+            _error = "Все тезисы должны быть заполнены контентом";
+            return;
+        }
+
         await OnContinueCallback.InvokeAsync();
     }
 }

@@ -990,3 +990,26 @@ a.button {
 .comic-container {
     padding: 20px 20px;
 }
+
+.story__actions {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 10px;
+}
+
+.comic-story {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.comic-story__header {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.comic-story__title {
+    font-weight: bold;
+    margin: auto 0px;
+}
