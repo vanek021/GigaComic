@@ -11,5 +11,8 @@ namespace GigaComic.Client.Managers.Comic
         Task<IResult<ComicResponse>> CompleteAbstractCreationStageAsync(CompleteAbstractCreationRequest model);
 
         Task<IResult<ComicResponse>> CompleteStoriesCreationStageAsync(CompleteStoriesCreationRequest model);
+
+        Task<IResult<ComicResponse>> CompleteSetupStageAsync(ComicSetupRequest model);
+
     }
 }

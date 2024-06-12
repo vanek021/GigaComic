@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GigaComic.Models.Enums
 {
-    public enum ComicGrid
+    public enum ComicLabel
     {
-        [Display(Name = "Стандартная")]
-        Default
+        [Display(Name = "Снизу")]
+        Below
     }
 }

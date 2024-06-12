@@ -1,5 +1,42 @@
-﻿<h3>CustomizeComic</h3>
+﻿@using GigaComic.Models.Enums
+@using GigaComic.Shared.Requests.Comic
+@using GigaComic.Shared.Responses.Comic
+
+<EditForm OnValidSubmit="OnContinue" Model="ComicResponseModel">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <h2 class="content__title">
+        Почти все готово. Давайте настроим ваш комикс:
+    </h2>
+
+    <div class="comic-container">
+        <EnumSelect TEnum="ComicStyle" @bind-Value="ComicSetupRequestModel.Style" />
+        <EnumSelect TEnum="ComicLabel" @bind-Value="ComicSetupRequestModel.Label" />
+        <EnumSelect TEnum="ComicGrid" @bind-Value="ComicSetupRequestModel.Grid" />
+    </div>
+
+    <div class="story__actions">
+        <ButtonWithLoader Type="submit"
+                          Text="Продолжить"
+                          Color="ButtonWithLoader.BtnColor.Black" />
+    </div>
+
+</EditForm>
+
 
 @code {
+    [Parameter]
+    public ComicResponse? ComicResponseModel { get; set; }
 
+    [Parameter]
+    public ComicSetupRequest ComicSetupRequestModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnContinueCallback { get; set; }
+
+    private async Task OnContinue()
+    {
+        await OnContinueCallback.InvokeAsync();
+    }
 }

@@ -8,16 +8,20 @@
 @switch (ComicResponseModel.Stage)
 {
     case ComicStage.AbstractsCreation:
-        <CreateAbstracts ComicResponseModel="ComicResponseModel" OnContinueCallback="CompleteAbstractsCreationAsync" />
+        <CreateAbstracts ComicResponseModel="ComicResponseModel"
+                         OnContinueCallback="CompleteAbstractsCreationAsync" />
         break;
     case ComicStage.StoriesEditing:
-        <CreateStories ComicResponseModel="ComicResponseModel" />
+        <CreateStories ComicResponseModel="ComicResponseModel"
+                       OnContinueCallback="CompleteStoriesCreationAsync" />
         break;
     case ComicStage.ComicSetup:
-        <ComicSetup />
+        <ComicSetup ComicResponseModel="ComicResponseModel"
+                    ComicSetupRequestModel="_comicSetupRequest"
+                    OnContinueCallback="CompleteComicSetupAsync" />
         break;
     case ComicStage.Completed:
-        <ComicResult />
+        <ComicResult ComicResponseModel="ComicResponseModel" />
         break;
     default:
         throw new ArgumentException();
@@ -29,22 +33,24 @@
     [Parameter]
     public ComicResponse ComicResponseModel { get; set; }
 
+    private ComicSetupRequest _comicSetupRequest { get; set; } = new();
+
     private async Task CompleteAbstractsCreationAsync()
     {
         var request = new CompleteAbstractCreationRequest()
-        {
-            ComicId = ComicResponseModel.Id,
-        };
+            {
+                ComicId = ComicResponseModel.Id,
+            };
 
         foreach (var cAbstract in ComicResponseModel.ComicAbstracts)
         {
             request.Abstracts.Add(new AbstractRequest()
-            {
-                Id = cAbstract.Id,
-                IsActive = cAbstract.IsActive,
-                Name = cAbstract.Name,
-                Order = cAbstract.Order
-            });
+                {
+                    Id = cAbstract.Id,
+                    IsActive = cAbstract.IsActive,
+                    Name = cAbstract.Name,
+                    Order = cAbstract.Order
+                });
         }
 
         var result = await comicManager.CompleteAbstractCreationStageAsync(request);
@@ -63,16 +69,23 @@
         foreach (var cAbstract in ComicResponseModel.ComicAbstracts)
         {
             request.Stories.Add(new StoryRequest()
-            {
-                Id = cAbstract.Id,
-                //IsActive = cAbstract.IsActive,
-                Content = cAbstract.Content!,
-                //Order = cAbstract.Order
-            });
+                {
+                    Id = cAbstract.Id,
+                    //IsActive = cAbstract.IsActive,
+                    Content = cAbstract.Content!,
+                    //Order = cAbstract.Order
+                });
         }
 
         var result = await comicManager.CompleteStoriesCreationStageAsync(request);
 
+        ComicResponseModel = result.Data;
+        StateHasChanged();
+    }
+
+    private async Task CompleteComicSetupAsync()
+    {
+        var result = await comicManager.CompleteSetupStageAsync(_comicSetupRequest);
         ComicResponseModel = result.Data;
         StateHasChanged();
     }

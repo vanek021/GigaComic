@@ -1,5 +1,8 @@
-﻿<h3>ComicResult</h3>
+﻿@using GigaComic.Shared.Responses.Comic
+
+<h3>ComicResult</h3>
 
 @code {
-
+    [Parameter]
+    public ComicResponse? ComicResponseModel { get; set; }
 }
