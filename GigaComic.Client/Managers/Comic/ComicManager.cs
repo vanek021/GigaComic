@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace GigaComic.Client.Managers.Comic
 {
-    public class ComicManager : IComicManager
+    public class ComicManager //: IComicManager
     {
         private readonly HttpClient _httpClient;
 

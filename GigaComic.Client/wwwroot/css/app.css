@@ -650,6 +650,12 @@ body {
     text-align: center;
     cursor: pointer;
     transition: all .2s ease;
+    height: 42px;
+}
+
+.button:hover {
+    color: black;
+    border: 2px solid black;
 }
 
 a.button {
@@ -887,4 +893,123 @@ a.button {
 .theme__input {
     height: 100%;
     line-height: 100% !important;
+}
+
+.abstracts__item {
+}
+
+.abstracts__actions {
+    padding: 20px 20px;
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 10px;
+}
+
+.abstracts__list {
+    padding: 20px 20px;
+}
+
+
+
+.abstracts__list-flex {
+    column-gap: 10px;
+    gap: 10px;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.abstracts__item-inactive {
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid black;
+    border-radius: .25rem;
+    gap: 10px;
+    cursor: pointer;
+}
+
+    .abstracts__item-inactive:hover {
+        background-color: #f5f5f5;
+    }
+
+    .abstracts__item-inactive p {
+        margin: 1rem;
+    }
+
+.abstracts__item p {
+    padding: 0px 20px 0px 0px;
+    margin: 1rem;
+}
+
+.dragdrop {
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px;
+    padding: 20px 20px;
+    border: 1px solid black;
+}
+
+.dragdrop__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid black;
+    border-radius: .25rem;
+}
+
+.dragdrop__item-draggable {
+    display: flex;
+    align-items: center;
+}
+
+.close-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #fff;
+    /* border-radius: 50%; */
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+    .close-button:hover {
+        background-color: #ccc;
+    }
+
+.comic-container {
+    padding: 20px 20px;
+}
+
+.story__actions {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 10px;
+}
+
+.comic-story {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.comic-story__header {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.comic-story__title {
+    font-weight: bold;
+    margin: auto 0px;
 }

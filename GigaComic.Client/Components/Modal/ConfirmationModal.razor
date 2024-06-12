@@ -1,0 +1,38 @@
+﻿@if (displayConfirmation)
+{
+    <div class="modal-backdrop show"></div>
+
+    <div class="modal fade show" id="deleteConfiramtionModal" tabindex="-1" role="dialog"
+         aria-labelledby="deleteConfiramtionModal" aria-hidden="true" style="display:block">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Title</h5>
+                </div>
+                <div class="modal-body">
+                    @ChildContent
+                </div>
+                <div class="modal-footer flex align-items-center justify-content-center">
+                    <button @onclick="OnConfirm" type="button" class="btn btn-modal btn-modal-ok">OK</button>
+                    @if (OnCancel.HasDelegate)
+                    {
+                        <button @onclick="OnCancel" type="button" class="btn btn-modal btn-modal-cancel">Cancel</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    bool displayConfirmation = false;
+
+    [Parameter] public string Title { get; set; } = "Внимание";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public EventCallback OnConfirm { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    public void Show() => displayConfirmation = true;
+    public void Hide() => displayConfirmation = false;
+}
