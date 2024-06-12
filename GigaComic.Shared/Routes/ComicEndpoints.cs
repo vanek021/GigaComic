@@ -8,6 +8,9 @@ namespace GigaComic.Shared.Routes
 {
     public static class ComicEndpoints
     {
-        public const string CreateComicByTheme = "CreateComicByTheme";
+        public const string CreateComicByTheme = "api/Comic/CreateComicByTheme";
+        public const string CompleteAbstractCreationStage = "api/Comic/CompleteAbstractCreationStage";
+        public const string CompleteStoriesCreationStage = "api/Comic/CompleteStoriesCreationStage";
+        public const string CompleteSetupStage = "api/Comic/CompleteSetupStage";
     }
 }
