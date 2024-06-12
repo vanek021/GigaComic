@@ -941,7 +941,7 @@ a.button {
 }
 
 .dragdrop {
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 10px;
     flex-wrap: wrap;
     margin: 20px;
@@ -958,11 +958,12 @@ a.button {
     background-clip: border-box;
     border: 1px solid black;
     border-radius: .25rem;
+    align-items: center;
 }
 
-.dragdrop__item-draggable {
-    display: flex;
-    align-items: center;
+.dragdrop__item--dragged {
+    border: 2px solid black !important;
+    background-color: red !important;
 }
 
 .close-button {

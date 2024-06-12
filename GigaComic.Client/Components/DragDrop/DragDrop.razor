@@ -1,5 +1,7 @@
 ﻿@using GigaComic.Shared.Interfaces
 @using GigaComic.Infrastructure.Extensions
+
+@inject IJSRuntime js
 ﻿
 @typeparam TItem where TItem : class, IDraggable
 
@@ -9,15 +11,12 @@
         {
             @if (ItemTemplate is not null)
             {
-                <div class="dragdrop__item" id="@Items.IndexOf(item)">
-                    <div class="dragdrop__item-draggable"
-                         draggable="true"
-                         tabindex="1"
-                         @key="Items.IndexOf(item)"
-                         @ondrop="@(async ()=> await Drop(item))"
-                         @ondrag="@(()=> StartDrag(item))">
-                        @ItemTemplate(item)
-                    </div>
+                <div class="dragdrop__item"
+                     draggable="true"
+                     @key="Items.IndexOf(item)"
+                     @ondrop="@(async () => await Drop(item))"
+                     @ondrag="@(()=> Drag(item))">
+                    @ItemTemplate(item)
                 </div>
             }
         }
@@ -37,10 +36,21 @@
     [Parameter]
     public EventCallback<long> DeleteItemCallback { get; set; }
 
-    int currentIndex;
-    bool isSaveInProcess = false;
+    private TItem? _currentDragged = null;
+    private int currentIndex;
+    private bool isSaveInProcess = false;
 
-    void StartDrag(TItem item)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await js.InvokeVoidAsync("initDragEvents");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    void Drag(TItem item)
     {
         currentIndex = GetIndex(item);
     }
