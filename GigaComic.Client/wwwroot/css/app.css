@@ -653,10 +653,10 @@ body {
     height: 42px;
 }
 
-.button:hover {
-    color: black;
-    border: 2px solid black;
-}
+    .button:hover {
+        color: black;
+        border: 2px solid black;
+    }
 
 a.button {
     display: block;
@@ -1014,3 +1014,71 @@ a.button {
     font-weight: bold;
     margin: auto 0px;
 }
+
+.modal {
+    padding: 30px 20px 20px 20px;
+    border-radius: 10px;
+}
+
+.modal-title {
+    font-weight: 700;
+    text-align: center;
+    font-size: 25px;
+    color: #3b3d40;
+}
+
+.modal-header {
+    position: relative;
+    font-size: 40px;
+    color: #3b3d40;
+    font-weight: 700;
+    text-align: center;
+    justify-content: center !important;
+}
+
+.modal-content {
+    padding: 10px;
+    position: relative;
+    height: auto;
+}
+
+.modal-body {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-modal {
+    min-width: 100px;
+    min-height: 30px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: .1em;
+}
+
+.btn-modal-ok {
+    color: #fff;
+    outline: none;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid var(--color-main);
+    background-color: var(--color-main);
+}
+
+    .btn-modal-ok:hover {
+        color: #fff;
+    }
+
+.btn-modal-cancel {
+    cursor: pointer;
+    border: 2px solid #d9d9d9;
+    background-color: transparent;
+    color: #000;
+}
+
+    .btn-modal-cancel:hover {
+        color: #000 !important;
+    }
