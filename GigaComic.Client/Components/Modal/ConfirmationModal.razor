@@ -12,11 +12,11 @@
                 <div class="modal-body">
                     @ChildContent
                 </div>
-                <div class="modal-footer flex align-items-center justify-content-center">
-                    <button @onclick="OnConfirm" type="button" class="btn btn-modal btn-modal-ok">OK</button>
+                <div class="modal-footer flex align-items-end justify-content-end">
+                    <button @onclick="OnConfirm" type="button" class="btn btn-modal btn-modal-ok">ОК</button>
                     @if (OnCancel.HasDelegate)
                     {
-                        <button @onclick="OnCancel" type="button" class="btn btn-modal btn-modal-cancel">Cancel</button>
+                        <button @onclick="OnCancel" type="button" class="btn btn-modal btn-modal-cancel">Отменить</button>
                     }
                 </div>
             </div>

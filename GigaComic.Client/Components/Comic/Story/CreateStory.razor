@@ -1,0 +1,21 @@
+﻿@using GigaComic.Shared.Responses.Comic
+
+<div class="comic-story">
+    <div class="comic-story__header">
+        <span class="comic-story__title">
+            @Abstract!.Name
+        </span>
+        <div class="comic-story__actions">
+            <Button>Редактировать</Button>
+            <Button>Перегенерировать</Button>
+        </div>
+    </div>
+    <div class="comic-story__body">
+        @Abstract.Content
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ComicAbstractResponse? Abstract { get; set; }
+}

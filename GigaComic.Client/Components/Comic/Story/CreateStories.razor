@@ -13,20 +13,7 @@
     <div class="comic-container">
         @foreach (var cAbstract in ComicResponseModel!.OrderedActiveAbstracts)
         {
-            <div class="comic-story">
-                <div class="comic-story__header">
-                    <span class="comic-story__title">
-                        @cAbstract.Name
-                    </span>
-                    <div class="comic-story__actions">
-                        <Button>Редактировать</Button>
-                        <Button>Перегенерировать</Button>
-                    </div>
-                </div>
-                <div class="comic-story__body">
-                    @cAbstract.Content
-                </div>
-            </div>
+            <CreateStory Abstract="cAbstract" />
         }
 
         @if (!string.IsNullOrEmpty(_error))

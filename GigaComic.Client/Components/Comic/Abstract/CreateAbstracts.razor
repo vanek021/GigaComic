@@ -1,4 +1,5 @@
-﻿@using GigaComic.Shared.Responses.Comic
+﻿@using GigaComic.Client.Components.Modal
+@using GigaComic.Shared.Responses.Comic
 
 <EditForm OnValidSubmit="OnContinue" Model="ComicResponseModel">
     <DataAnnotationsValidator />
@@ -35,15 +36,20 @@
             </div>
         </div>
     }
-    
+
     <div class="abstracts__actions">
-        <Button Class="button --default-button" Type="button">Добавить тезис</Button>
+        <Button Class="button --default-button"
+                OnClick="ShowCreateAbstractModal"
+                Type="button">
+            Добавить тезис
+        </Button>
         <ButtonWithLoader Type="submit"
-                          Text="Продолжить"
-                          Color="ButtonWithLoader.BtnColor.Black" />
+                          Text="Продолжить" />
     </div>
 
 </EditForm>
+
+<AbstractCreateModal @ref="_abstractCreateModalDraft" OnCreate="CreateAbstract" />
 @code {
     [Parameter]
     public ComicResponse? ComicResponseModel { get; set; }
@@ -53,6 +59,7 @@
 
     private List<ComicAbstractResponse> _orderedActiveAbstracts = new();
     private List<ComicAbstractResponse> _notActiveAbstracts = new();
+    private AbstractCreateModal? _abstractCreateModalDraft;
     private string? _error;
 
     protected override Task OnInitializedAsync()
@@ -104,5 +111,17 @@
         item.IsActive = true;
 
         _orderedActiveAbstracts.Add(item);
+    }
+
+    private void ShowCreateAbstractModal()
+    {
+        _abstractCreateModalDraft?.Show();
+        StateHasChanged();
+    }
+
+    private void CreateAbstract(ComicAbstractResponse comicAbstract)
+    {
+        _orderedActiveAbstracts = _orderedActiveAbstracts.Append(comicAbstract).ToList();
+        StateHasChanged();
     }
 }

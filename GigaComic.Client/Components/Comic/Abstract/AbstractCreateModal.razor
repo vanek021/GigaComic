@@ -1,0 +1,53 @@
+﻿@using GigaComic.Client.Components.Modal
+@using GigaComic.Shared.Responses.Comic
+
+@inherits BaseModal
+
+<ConfirmationModal Title="Создать тезис" @ref="_confirmationModal" OnCancel="Cancel" OnConfirm="Confirm">
+    <EditForm EditContext="_editContext">
+        <DataAnnotationsValidator />
+        <div style="margin-bottom: 10px;">Введите название тезиса. Оно должно отражать ту часть истории, которую вы хотите добавить.</div>
+        <Input @bind-Value="_newAbstract.Name" />
+        <ValidationMessage For="@(() => _newAbstract.Name)" />
+    </EditForm>
+</ConfirmationModal>
+
+@code {
+    [Parameter]
+    public EventCallback<ComicAbstractResponse> OnCreate { get; set; }
+
+    private ComicAbstractResponse _newAbstract = new();
+
+    private EditContext? _editContext;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ResetDraft();
+        await base.OnInitializedAsync();
+    }
+
+    public void ResetDraft()
+    {
+        _newAbstract = new();
+        _editContext = new EditContext(_newAbstract);
+    }
+
+    public void Cancel()
+    {
+        _confirmationModal!.Hide();
+        ResetDraft();
+    }
+
+    public async Task Confirm()
+    {
+        var isValid = _editContext!.Validate();
+        if (isValid)
+        {
+            await OnCreate.InvokeAsync(_newAbstract);
+            _confirmationModal!.Hide();
+            ResetDraft();
+        }
+
+        StateHasChanged();
+    }
+}
