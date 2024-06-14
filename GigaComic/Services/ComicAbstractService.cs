@@ -28,5 +28,32 @@ namespace GigaComic.Services
                 .Select(x => new ComicAbstract() { Comic = comic, Name = x })
                 .ToList();
         }
+
+        public async Task AddPlots(List<ComicAbstract> abstracts)
+        {
+            var answer = await _chatClient.GenerateAnswer(BuildPromptForPlotAdd(abstracts));
+
+            var plots = answer.Split("\n")
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToList();
+
+            if (plots.Count < abstracts.Count)
+                throw new Exception("Ai vashe kapec dawn");
+
+            for (int i = 0; i < abstracts.Count; i++)
+            {
+                abstracts[i].Content = plots[i];
+            }
+        }
+
+        public string BuildPromptForPlotAdd(List<ComicAbstract> abstracts)
+        {
+            var strAbstracts = string.Join("\n", abstracts.Select(x => x.Name));
+            var prompt = "Тебе даны действия комикса. Напиши ОДИН развернутый сюжет для каждого действия.\r\n" +
+                         "Каждый сюжет с новой строки. Один сюжет ОДНА строка \r\n" +
+                         strAbstracts;
+
+            return prompt;
+        }
     }
 }
