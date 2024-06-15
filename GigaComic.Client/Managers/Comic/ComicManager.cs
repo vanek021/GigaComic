@@ -7,13 +7,34 @@ using System.Net.Http.Json;
 
 namespace GigaComic.Client.Managers.Comic
 {
-    public class ComicManager //: IComicManager
+    public class ComicManager : IComicManager
     {
         private readonly HttpClient _httpClient;
 
         public ComicManager(HttpClient httpClient)
         {
             _httpClient = httpClient;
+        }
+
+        public async Task<IResult<ComicResponse>> CompleteAbstractCreationStageAsync(CompleteAbstractCreationRequest model)
+        {
+            var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteAbstractCreationStage, model);
+            var result = await response.ToResultAsync<ComicResponse>();
+            return result;
+        }
+
+        public async Task<IResult<ComicResponse>> CompleteSetupStageAsync(ComicSetupRequest model)
+        {
+            var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteSetupStage, model);
+            var result = await response.ToResultAsync<ComicResponse>();
+            return result;
+        }
+
+        public async Task<IResult<ComicResponse>> CompleteStoriesCreationStageAsync(CompleteStoriesCreationRequest model)
+        {
+            var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteStoriesCreationStage, model);
+            var result = await response.ToResultAsync<ComicResponse>();
+            return result;
         }
 
         public async Task<IResult<ComicResponse>> CreateComicByThemeAsync(CreateComicRequest model)

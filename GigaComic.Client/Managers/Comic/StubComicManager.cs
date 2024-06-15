@@ -5,7 +5,7 @@ using GigaComic.Shared.Responses.Comic;
 
 namespace GigaComic.Client.Managers.Comic
 {
-    public class StubComicManager : IComicManager
+    public class StubComicManager //: //IComicManager
     {
         public async Task<IResult<ComicResponse>> CompleteAbstractCreationStageAsync(CompleteAbstractCreationRequest model)
         {

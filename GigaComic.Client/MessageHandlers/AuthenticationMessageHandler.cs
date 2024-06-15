@@ -19,6 +19,8 @@ namespace GigaComic.Client.MessageHandlers
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            //request.SetBrowserRequestMode(BrowserRequestMode.NoCors);
+
             if (request.Headers.Authorization?.Scheme != "Bearer")
             {
                 var savedToken = await _storageService.GetItemAsync<string>(StorageConstants.AccessToken);
