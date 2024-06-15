@@ -9,10 +9,12 @@ namespace GigaComic.Shared.Requests.Comic
 {
     public class ComicSetupRequest : IRequest
     {
+        public long ComicId { get; set; }
         public ComicStyle Style { get; set; }
 
         public ComicGrid Grid { get; set; }
 
         public ComicLabel Label { get; set; }
+
     }
 }

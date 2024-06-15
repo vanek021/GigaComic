@@ -17,9 +17,9 @@ namespace GigaComic.Models.Entities.Comic
         public ComicGrid Grid { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public long UserId { get; set; }
 
-        public virtual ICollection<ComicAbstract> ComicAbstracts { get; set; }
+        public virtual List<ComicAbstract> ComicAbstracts { get; set; }
     }
 }

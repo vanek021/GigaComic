@@ -13,10 +13,10 @@ namespace GigaComic.Models.Entities.Comic
         public int Order { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
-        public string? Plot { get; set; }
+        public string? Content { get; set; }
 
         [ForeignKey(nameof(ComicId))]
-        public Comic Comic { get; set; }
+        public virtual Comic Comic { get; set; }
         public long ComicId { get; set; }
     }
 }
