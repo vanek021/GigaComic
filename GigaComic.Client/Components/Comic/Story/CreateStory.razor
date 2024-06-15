@@ -1,21 +1,86 @@
-﻿@using GigaComic.Shared.Responses.Comic
+﻿@using GigaComic.Client.Managers.Comic
+@using GigaComic.Shared.Responses.Comic
+
+@inject IComicManager comicManager
+@inject IJSRuntime js
 
 <div class="comic-story">
     <div class="comic-story__header">
         <span class="comic-story__title">
             @Abstract!.Name
         </span>
-        <div class="comic-story__actions">
-            <Button>Редактировать</Button>
-            <Button>Перегенерировать</Button>
-        </div>
+        @if (!_isEditing)
+        {
+            <div class="comic-story__actions">
+                <Button OnClick="Edit">Редактировать</Button>
+                <Button OnClick="Regenerate">Перегенерировать</Button>
+            </div>
+        }
     </div>
     <div class="comic-story__body">
-        @Abstract.Content
+        @if (_isEditing)
+        {
+            <InputTextArea class="ant-input comic-story__textarea" @bind-Value="Abstract!.Content" />
+        }
+        else
+        {
+            @Abstract.Content
+        }
+        @if (!string.IsNullOrEmpty(_error))
+        {
+            <div class="validation-message mt-2">@_error</div>
+        }
     </div>
+    @if (_isEditing)
+    {
+        <div class="comic-story__actions mt-2">
+            <Button OnClick="SaveEdit">Сохранить</Button>
+            <Button OnClick="CancelEdit">Отмена</Button>
+        </div>
+    }
 </div>
 
 @code {
     [Parameter]
     public ComicAbstractResponse? Abstract { get; set; }
+
+    private string _id = Guid.NewGuid().ToString();
+    private bool _isEditing = false;
+    private string? _oldValue = null;
+    private string? _error = null;
+
+    private void Edit()
+    {
+        _error = null;
+        _isEditing = true;
+        _oldValue = Abstract!.Content;
+        StateHasChanged();
+    }
+
+    private void CancelEdit()
+    {
+        _error = null;
+        _isEditing = false;
+        Abstract!.Content = _oldValue;
+        StateHasChanged();
+    }
+
+    private void SaveEdit()
+    {
+        if (string.IsNullOrEmpty(Abstract!.Content))
+        {
+            _error = "Введите содержимое истории";
+            StateHasChanged();
+            return;
+        }
+
+        _error = null;
+        _isEditing = false;
+        StateHasChanged();
+    }
+
+    private void Regenerate()
+    {
+        
+    }
 }

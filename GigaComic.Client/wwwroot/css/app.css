@@ -1082,3 +1082,12 @@ a.button {
     .btn-modal-cancel:hover {
         color: #000 !important;
     }
+
+.comic-story__textarea {
+    field-sizing: content;
+}
+
+.comic-container__setup {
+    margin: 0 auto;
+    max-width: 800px;
+}

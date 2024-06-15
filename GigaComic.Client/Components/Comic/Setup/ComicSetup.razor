@@ -11,15 +11,33 @@
     </h2>
 
     <div class="comic-container">
-        <EnumSelect TEnum="ComicStyle" @bind-Value="ComicSetupRequestModel.Style" />
-        <EnumSelect TEnum="ComicLabel" @bind-Value="ComicSetupRequestModel.Label" />
-        <EnumSelect TEnum="ComicGrid" @bind-Value="ComicSetupRequestModel.Grid" />
+        <div class="comic-container__setup">
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Стиль</label>
+                <div class="col-sm-8">
+                    <EnumSelect TEnum="ComicStyle" @bind-Value="ComicSetupRequestModel.Style" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Расположение текста</label>
+                <div class="col-sm-8">
+                    <EnumSelect TEnum="ComicLabel" @bind-Value="ComicSetupRequestModel.Label" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Сетка</label>
+                <div class="col-sm-8">
+                    <EnumSelect TEnum="ComicGrid" @bind-Value="ComicSetupRequestModel.Grid" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="story__actions">
         <ButtonWithLoader Type="submit"
                           Text="Продолжить"
-                          Color="ButtonWithLoader.BtnColor.Black" />
+                          Width="148"
+                          Height="48" />
     </div>
 
 </EditForm>
