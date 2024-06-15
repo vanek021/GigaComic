@@ -7,7 +7,7 @@ WORKDIR /src
 
 COPY ["GigaComic/GigaComic.csproj", "GigaComic/"]
 COPY ["GigaComic.Core/GigaComic.Core.csproj", "GigaComic.Core/"]
-COPY ["GigaComic.Core/GigaComic.Core.Server.csproj", "GigaComic.Core.Server/"]
+COPY ["GigaComic.Core.Server/GigaComic.Core.Server.csproj", "GigaComic.Core.Server/"]
 COPY ["GigaComic.Data/GigaComic.Data.csproj", "GigaComic.Data/"]
 COPY ["GigaComic.Infrastructure/GigaComic.Infrastructure.csproj", "GigaComic.Infrastructure/"]
 COPY ["GigaComic.Models/GigaComic.Models.csproj", "GigaComic.Models/"]
