@@ -42,6 +42,11 @@ namespace GigaComic.Services
             return DbSet.Find(primaryKey);
         }
 
+        public virtual async Task<T?> GetAsync(params object[] primaryKey)
+        {
+            return await DbSet.FindAsync(primaryKey);
+        }
+
         public virtual async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter)
         {
             return await Get().SingleAsync(filter);

@@ -2,6 +2,7 @@
 using GigaComic.Models.Entities.Comic;
 using GigaComic.Models.Enums;
 using GigaComic.Services;
+using GigaComic.Shared.Constants;
 using GigaComic.Shared.Requests.Comic;
 using GigaComic.Shared.Responses.Comic;
 using GigaComic.Shared.Routes;
@@ -85,7 +86,7 @@ namespace GigaComic.Controllers
             {
                 var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                var comic = _comicService.Get(model.ComicId);
+                var comic = await _comicService.GetAsync(model.ComicId);
 
                 if (comic is null)
                     return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
@@ -117,7 +118,7 @@ namespace GigaComic.Controllers
             {
                 var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                var comic = _comicService.Get(model.ComicId);
+                var comic = await _comicService.GetAsync(model.ComicId);
 
                 if (comic is null)
                     return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
@@ -129,6 +130,43 @@ namespace GigaComic.Controllers
                 _comicService.Update(comic);
 
                 return BlazorOk(_mapper.Map<ComicResponse>(comic));
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route(ComicEndpoints.Comic)]
+        public async Task<IActionResult> GetComic(long id)
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var comic = await _comicService.GetAsync(id);
+
+                if (comic is null || comic.UserId != userId)
+                    return BlazorNotFound($"Не существует комикса с указанным id.");
+
+                return BlazorOk(_mapper.Map<ComicResponse>(comic));
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route(ComicEndpoints.Comics)]
+        public async Task<IActionResult> GetComics(int page, int pageSize)
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var comics = await _comicService.GetPagedComics(userId, page, pageSize);
+
+                return PaginatedBlazorOk(comics);
             }
             catch (Exception ex)
             {

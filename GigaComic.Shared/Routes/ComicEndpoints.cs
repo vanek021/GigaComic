@@ -14,13 +14,13 @@ namespace GigaComic.Shared.Routes
         public const string CompleteStoriesCreationStage = "api/Comic/CompleteStoriesCreationStage";
         public const string CompleteSetupStage = "api/Comic/CompleteSetupStage";
         public const string RegenerateAbstractStory = "api/Comic/RegenerateAbstractStory";
-        public const string ComicResult = "api/Comic/ComicResult";
-        public const string ComicResults = "api/Comic/ComicResult";
+        public const string Comic = "api/Comic/Comic";
+        public const string Comics = "api/Comic/Comics";
 
-        public static string GetComicResult(Guid id)
-            => $"{ComicResult}?id={id}";
+        public static string GetComic(Guid id)
+            => $"{Comic}?id={id}";
 
         public static string GetComicResults(Guid id, int page = 1, int pageSize = PageConstants.DefaultPageSize)
-            => $"{ComicResults}?id={id}&page={page}&pageSize={pageSize}";
+            => $"{Comics}?id={id}&page={page}&pageSize={pageSize}";
     }
 }
