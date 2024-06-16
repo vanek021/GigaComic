@@ -1,6 +1,5 @@
 function initDragEvent(drag) {
     var app = document.getElementById('app');
-    console.log(drag);
 
     drag.addEventListener("dragstart", function (e) {
         var hideDragImage = this.cloneNode(true);
@@ -56,9 +55,5 @@ function initDragEvents() {
 }
 
 function initDragEventById(id) {
-    console.log(id);
-    var el = $(`#${id}`);
-    console.log('el');
-    console.log(el[0]);
     initDragEvent($(`#${id}`)[0]);
 }
