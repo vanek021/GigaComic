@@ -8,7 +8,7 @@
     <h2 class="content__title">Выберите тезисы, которые мы придумали для вас:</h2>
 
     <div class="abstracts__container">
-        <DragDrop Items="_orderedActiveAbstracts" Context="item">
+        <DragDrop Items="_orderedActiveAbstracts" Context="item" @ref="_dragDrop">
             <ItemTemplate>
                 <div class="abstracts__item">
                     <div class="close-button" @onclick="(_ => RemoveFromActive(item))">×</div>
@@ -62,6 +62,7 @@
     private List<ComicAbstractResponse> _notActiveAbstracts = new();
     private AbstractCreateModal? _abstractCreateModalDraft;
     private ButtonWithLoader? _btn;
+    private DragDrop<ComicAbstractResponse>? _dragDrop;
     private string? _error;
 
     protected override Task OnInitializedAsync()
@@ -108,7 +109,7 @@
         }
     }
 
-    private void AddToActive(ComicAbstractResponse item)
+    private async Task AddToActive(ComicAbstractResponse item)
     {
         _notActiveAbstracts.Remove(item);
 
@@ -116,6 +117,7 @@
         item.IsActive = true;
 
         _orderedActiveAbstracts.Add(item);
+        await _dragDrop!.InitDragEvent(item.Order.ToString());
     }
 
     private void ShowCreateAbstractModal()

@@ -13,6 +13,17 @@
                    @bind-Value="CreateComicRequestModel!.Theme"
                    TValue="string" />
             <ValidationMessage For="@(() => CreateComicRequestModel.Theme)" />
+            <div class="theme__placeholder">
+                Введите не большое, но при этом конкретное описание темы комикса
+                <br />
+                Пример хорошего описания:
+                <br />
+                - Чебурашка ограбил банк, но был пойман крокодилом Геной и сдан в полицию.
+                <br />
+                Пример плохого описания:
+                <br />
+                - Я ограбил банк.
+            </div>
         </div>
 
         <ButtonWithLoader Type="submit"

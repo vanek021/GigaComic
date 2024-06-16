@@ -15,7 +15,8 @@
                      draggable="true"
                      @key="Items.IndexOf(item)"
                      @ondrop="@(async () => await Drop(item))"
-                     @ondrag="@(()=> Drag(item))">
+                     @ondrag="@(()=> Drag(item))"
+                     id="dragDropItem_@(item.Order)">
                     @ItemTemplate(item)
                 </div>
             }
@@ -39,15 +40,35 @@
     private TItem? _currentDragged = null;
     private int currentIndex;
     private bool isSaveInProcess = false;
+    private Queue<string> _queueInit = new();
+    private bool _needInit = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-        {
-            await js.InvokeVoidAsync("initDragEvents");
-        }
+            await InitDragEvents();
+
+        if (!firstRender && _queueInit.Count > 0)
+            while(_queueInit.TryDequeue(out var realId))
+                await RealInitDragEvent(realId);
 
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public async Task InitDragEvents()
+    {
+        await js.InvokeVoidAsync("initDragEvents");
+    }
+
+    public async Task InitDragEvent(string id)
+    {
+        var realId = $"dragDropItem_{id}";
+        _queueInit.Enqueue(realId);
+    }
+
+    async Task RealInitDragEvent(string realId)
+    {
+        await js.InvokeVoidAsync("initDragEventById", realId);
     }
 
     void Drag(TItem item)
