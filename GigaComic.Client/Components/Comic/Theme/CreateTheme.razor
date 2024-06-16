@@ -18,7 +18,8 @@
         <ButtonWithLoader Type="submit"
                           Text="Продолжить"
                           Width="148"
-                          Height="48" />
+                          Height="48"
+                          @ref="_btn" />
 
     </div>
 
@@ -31,8 +32,12 @@
     [Parameter]
     public EventCallback OnContinueCallback { get; set; }
 
+    private ButtonWithLoader? _btn;
+
     private async Task OnContinue()
     {
+        _btn!.MarkAsLoading();
         await OnContinueCallback.InvokeAsync();
+        _btn!.MarkAsDefault();
     }
 }

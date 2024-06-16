@@ -43,7 +43,8 @@
                 Type="button">
             Добавить тезис
         </Button>
-        <ButtonWithLoader Type="submit"
+        <ButtonWithLoader @ref="_btn"
+                          Type="submit"
                           Text="Продолжить" />
     </div>
 
@@ -60,6 +61,7 @@
     private List<ComicAbstractResponse> _orderedActiveAbstracts = new();
     private List<ComicAbstractResponse> _notActiveAbstracts = new();
     private AbstractCreateModal? _abstractCreateModalDraft;
+    private ButtonWithLoader? _btn;
     private string? _error;
 
     protected override Task OnInitializedAsync()
@@ -75,17 +77,20 @@
 
     private async Task OnContinue()
     {
+        _btn!.MarkAsLoading();
         _error = null;
 
         if (_orderedActiveAbstracts.Count < 3)
         {
             _error = "Выберите как минимум 3 тезиса";
+            _btn!.MarkAsDefault();
             return;
         }
 
         ComicResponseModel!.ComicAbstracts = _orderedActiveAbstracts.Concat(_notActiveAbstracts).ToList();
 
         await OnContinueCallback.InvokeAsync();
+        _btn!.MarkAsDefault();
     }
 
     private void RemoveFromActive(ComicAbstractResponse item)

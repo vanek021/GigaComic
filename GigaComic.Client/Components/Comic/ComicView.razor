@@ -25,7 +25,7 @@
                     OnContinueCallback="CompleteComicSetupAsync" />
         break;
     case ComicStage.Completed:
-        <ComicResult ComicResponseModel="ComicResponseModel" />
+        <ComicResult ComicResultResponseModel="ComicResultResponseModel" />
         break;
     default:
         throw new ArgumentException();
@@ -36,6 +36,7 @@
 @code {
     [Parameter]
     public ComicResponse ComicResponseModel { get; set; }
+    public ComicResultResponse ComicResultResponseModel { get; set; }
 
     private ComicSetupRequest _comicSetupRequest { get; set; } = new();
 
@@ -91,6 +92,7 @@
     {
         var result = await comicManager.CompleteSetupStageAsync(_comicSetupRequest);
         ComicResponseModel = result.Data;
+        ComicResultResponseModel = result.Data;
         StateHasChanged();
     }
 }

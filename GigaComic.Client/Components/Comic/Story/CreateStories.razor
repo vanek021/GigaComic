@@ -26,7 +26,8 @@
             <ButtonWithLoader Type="submit"
                               Text="Продолжить"
                               Width="148"
-                              Height="48" />
+                              Height="48"
+                              @ref="_btn" />
         </div>
     </div>
 
@@ -40,17 +41,21 @@
     public EventCallback OnContinueCallback { get; set; }
 
     private string? _error;
+    private ButtonWithLoader? _btn;
 
     private async Task OnContinue()
     {
+        _btn!.MarkAsLoading();
         _error = null;
 
         if (ComicResponseModel!.OrderedActiveAbstracts.Any(x => x.IsActive && string.IsNullOrEmpty(x.Content)))
         {
             _error = "Все тезисы должны быть заполнены контентом";
+            _btn!.MarkAsDefault();
             return;
         }
 
         await OnContinueCallback.InvokeAsync();
+        _btn!.MarkAsDefault();
     }
 }

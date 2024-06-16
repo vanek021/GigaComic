@@ -1,5 +1,9 @@
 ﻿<button class="@_btnClass" disabled="@_btnDisabled" style="@btnStyle" type="@Type" @onclick="OnClickCallback">
     <span class="@GetSpanClass()">
+        @if (Icon.HasValue)
+        {
+            <AppIcon Style="margin-right: 2px;" Icon="Icon.Value" />
+        }
         @Text @(LoadingPercent.HasValue ? $"({LoadingPercent.Value} %)" : "")
     </span>
     <span style="@(!HideTextWhenLoading ? "margin-left: 6px;" : "")" class="@GetImgClass()"><span class="loader"></span></span>
@@ -11,6 +15,9 @@
 
     [Parameter]
     public BtnColor Color { get; set; }
+
+    [Parameter]
+    public AppIcon.IconKind? Icon { get; set; }
 
     [Parameter]
     public int? Width { get; set; }

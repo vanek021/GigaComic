@@ -1,0 +1,69 @@
+﻿<img src="@_src" class="@(!string.IsNullOrEmpty(Class) ? Class : "")" style="@(!string.IsNullOrEmpty(Style) ? Style : "")" />
+
+@code {
+    [Parameter]
+    public IconKind Icon { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    private string? _src;
+
+    protected override Task OnInitializedAsync()
+    {
+        switch (Icon)
+        {
+            case IconKind.Download:
+                _src = "/images/icons/actions/download.svg";
+                break;
+            case IconKind.Report:
+                _src = "/images/icons/actions/report.svg";
+                break;
+            case IconKind.Refresh:
+                _src = "/images/icons/actions/refresh.svg";
+                break;
+            case IconKind.More:
+                _src = "/images/icons/actions/more.svg";
+                break;
+            case IconKind.Arrow:
+                _src = "/images/icons/actions/arrow.svg";
+                break;
+            case IconKind.DownloadWhite:
+                _src = "/images/icons/actions/download-white.svg";
+                break;
+            case IconKind.ReportWhite:
+                _src = "/images/icons/actions/report-white.svg";
+                break;
+            case IconKind.RefreshWhite:
+                _src = "/images/icons/actions/refresh-white.svg";
+                break;
+            case IconKind.MoreWhite:
+                _src = "/images/icons/actions/more-white.svg";
+                break;
+            case IconKind.ArrowWhite:
+                _src = "/images/icons/actions/arrow-white.svg";
+                break;
+            default:
+                throw new ArgumentException();
+        }
+
+        return base.OnInitializedAsync();
+    }
+
+    public enum IconKind
+    {
+        Download,
+        More,
+        Refresh,
+        Report,
+        Arrow, 
+        DownloadWhite,
+        MoreWhite,
+        RefreshWhite,
+        ReportWhite,
+        ArrowWhite
+    }
+}

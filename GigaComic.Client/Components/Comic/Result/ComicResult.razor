@@ -1,8 +1,44 @@
 ﻿@using GigaComic.Shared.Responses.Comic
 
+@inject IJSRuntime js
+
 <h2 class="content__title">Вот, что получилось:</h2>
+
+<div class="comic-container">
+    <div class="swiper-button-prev"></div>
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <a data-lightbox="comic" href="/images/slide-example.png">
+                    <img src="/images/slide-example.png" />
+                </a>
+            </div>
+            <div class="swiper-slide">
+                <a data-lightbox="comic" href="/images/slide-example.png">
+                    <img src="/images/slide-example.png" />
+                </a>
+            </div>
+            <div class="swiper-slide">
+                <a data-lightbox="comic" href="/images/slide-example.png">
+                    <img src="/images/slide-example.png" />
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="comic-container__actions">
+        <ButtonWithLoader Icon="AppIcon.IconKind.DownloadWhite" Text="  .PDF" />
+        <ButtonWithLoader Icon="AppIcon.IconKind.DownloadWhite" Text="  .ZIP" />
+    </div>
+</div>
 
 @code {
     [Parameter]
-    public ComicResponse? ComicResponseModel { get; set; }
+    public ComicResultResponse? ComicResultResponseModel { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("initSwapper");
+        await base.OnAfterRenderAsync(firstRender);
+    }
 }
