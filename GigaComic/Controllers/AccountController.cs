@@ -26,25 +26,39 @@ public class AccountController : BaseApiController
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterRequest model)
     {
-        if (!ModelState.IsValid)
-            return BlazorBadRequest(GetModelErrors());
+        try
+        {
+            if (!ModelState.IsValid)
+                return BlazorBadRequest(GetModelErrors());
 
-        var createResult = await _accountService.CreateUser(model);
+            var createResult = await _accountService.CreateUser(model);
 
-        if (!createResult.Success)
-            return BlazorBadRequest(createResult.Errors);
+            if (!createResult.Success)
+                return BlazorBadRequest(createResult.Errors);
 
-        return await ProcessSignIn(model.Username, model.Password);
+            return await ProcessSignIn(model.Username, model.Password);
+        }
+        catch (Exception ex)
+        {
+            return BlazorBadRequest(ex.Message);
+        }
     }
 
     [Route(AccountEndpoints.SignIn)]
     [HttpPost]
     public async Task<IActionResult> SignIn([FromBody] SignInRequest model)
     {
-        if (!ModelState.IsValid)
-            return BlazorBadRequest(GetModelErrors());
+        try
+        {
+            if (!ModelState.IsValid)
+                return BlazorBadRequest(GetModelErrors());
 
-        return await ProcessSignIn(model.Username, model.Password);
+            return await ProcessSignIn(model.Username, model.Password);
+        }
+        catch (Exception ex)
+        {
+            return BlazorBadRequest(ex.Message);
+        }
     }
 
     private async Task<IActionResult> ProcessSignIn(string username, string password)

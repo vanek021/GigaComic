@@ -29,84 +29,111 @@ namespace GigaComic.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateComic([FromBody] CreateComicRequest model)
         {
-            var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var comic = _mapper.Map<Comic>(model);
-            comic.UserId = userId;
-            comic.ComicAbstracts = await _comicAbstractService.CreateAbstracts(5, comic);
+                var comic = _mapper.Map<Comic>(model);
+                comic.UserId = userId;
+                comic.ComicAbstracts = await _comicAbstractService.CreateAbstracts(5, comic);
 
-            _comicService.Add(comic);
+                _comicService.Add(comic);
 
-            return BlazorOk(_mapper.Map<ComicResponse>(comic));
+                return BlazorOk(_mapper.Map<ComicResponse>(comic));
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
         }
 
         [Route(ComicEndpoints.CompleteAbstractCreationStage)]
         [HttpPost]
         public async Task<IActionResult> CompleteAbstracts([FromBody] CompleteAbstractCreationRequest model)
         {
-            var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var comic = _comicService.Get(model.ComicId);
+                var comic = _comicService.Get(model.ComicId);
 
-            if (comic is null)
-                return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
-            if (comic.UserId != userId)
-                return BlazorBadRequest($"Cant touch this");
+                if (comic is null)
+                    return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
+                if (comic.UserId != userId)
+                    return BlazorBadRequest($"Cant touch this");
 
-            comic.ComicAbstracts = _mapper.Map<List<ComicAbstract>>(model.Abstracts);
-            comic.Stage = ComicStage.StoriesEditing;
+                comic.ComicAbstracts = _mapper.Map<List<ComicAbstract>>(model.Abstracts);
+                comic.Stage = ComicStage.StoriesEditing;
 
-            await _comicAbstractService.AddPlots(comic.ComicAbstracts);
+                await _comicAbstractService.AddPlots(comic.ComicAbstracts);
 
-            _comicService.Update(comic);
+                _comicService.Update(comic);
 
-            return BlazorOk(_mapper.Map<ComicResponse>(comic));
+                return BlazorOk(_mapper.Map<ComicResponse>(comic));
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
         }
 
         [Route(ComicEndpoints.CompleteStoriesCreationStage)]
         [HttpPost]
         public async Task<IActionResult> CompleteStoriesCreation([FromBody] CompleteStoriesCreationRequest model)
         {
-            var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-            var comic = _comicService.Get(model.ComicId);
-
-            if (comic is null)
-                return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
-            if (comic.UserId != userId)
-                return BlazorBadRequest($"Cant touch this");
-
-            for (int i = 0; i < comic.ComicAbstracts.Count; i++)
+            try
             {
-                comic.ComicAbstracts[i].Content = model.Stories[i].Content;
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+                var comic = _comicService.Get(model.ComicId);
+
+                if (comic is null)
+                    return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
+                if (comic.UserId != userId)
+                    return BlazorBadRequest($"Cant touch this");
+
+                for (int i = 0; i < comic.ComicAbstracts.Count; i++)
+                {
+                    comic.ComicAbstracts[i].Content = model.Stories[i].Content;
+                }
+
+                comic.Stage = ComicStage.ComicSetup;
+
+                _comicService.Update(comic);
+
+                return BlazorOk(_mapper.Map<ComicResponse>(comic));
             }
-
-            comic.Stage = ComicStage.ComicSetup;
-
-            _comicService.Update(comic);
-
-            return BlazorOk(_mapper.Map<ComicResponse>(comic));
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
         }
 
         [Route(ComicEndpoints.CompleteSetupStage)]
         [HttpPost]
         public async Task<IActionResult> CompleteSetup([FromBody] ComicSetupRequest model)
         {
-            var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var comic = _comicService.Get(model.ComicId);
+                var comic = _comicService.Get(model.ComicId);
 
-            if (comic is null)
-                return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
-            if (comic.UserId != userId)
-                return BlazorBadRequest($"Cant touch this");
+                if (comic is null)
+                    return BlazorNotFound($"Theres no comic with {model.ComicId} bruh");
+                if (comic.UserId != userId)
+                    return BlazorBadRequest($"Cant touch this");
 
-            _mapper.Map(model, comic);
+                _mapper.Map(model, comic);
 
-            _comicService.Update(comic);
+                _comicService.Update(comic);
 
-            return BlazorOk(_mapper.Map<ComicResponse>(comic));
+                return BlazorOk(_mapper.Map<ComicResponse>(comic));
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
         }
-
     }
 }
