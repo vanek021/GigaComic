@@ -1,0 +1,15 @@
+﻿@using GigaComic.Client.Extensions
+@using GigaComic.Models.Enums
+
+<span class="badge @GetSpanClass()">@Stage.GetDisplayName()</span>
+
+@code {
+    [Parameter]
+    public ComicStage Stage { get; set; }
+
+    private string GetSpanClass() =>
+        Stage == ComicStage.AbstractsCreation ? "bg-warning text-dark" :
+        Stage == ComicStage.StoriesEditing ? "bg-primary" :
+        Stage == ComicStage.ComicSetup ? "bg-info text-dark" :
+        Stage == ComicStage.Completed ? "bg-success" : "bg-light text-dark";
+}

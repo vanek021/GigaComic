@@ -1158,9 +1158,8 @@ a.button {
 
 .comic-history__item-title {
     padding-top: 10px;
-    font-weight: 600;
     font-size: 20px;
-    text-align: center;
+    text-align: left;
 }
 
     .comic-history__item-title:hover {
@@ -1171,4 +1170,8 @@ a.button {
 .theme__placeholder {
     margin-top: 5px;
     color: gray;
+}
+
+.comic-history__item-badge {
+    margin-top: 10px;
 }
