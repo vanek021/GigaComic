@@ -1,0 +1,68 @@
+﻿@page "/history/{Id:long}"
+
+@attribute [Authorize]
+
+@using GigaComic.Client.Components.Modal
+@using GigaComic.Client.Managers.Comic
+@using GigaComic.Shared.Responses.Comic
+
+@inject IComicManager comicManager
+@inject NavigationManager navManager
+
+<main class="page page__bg-gray">
+    <div class="content">
+        @if (!_isLoading)
+        {
+            @if (_comicResponseModel is not null)
+            {
+                <ComicView ComicResponseModel="_comicResponseModel" />
+            }
+        }
+        else
+        {
+            <div class="comic-container">
+                <CenteredLoader />
+            </div>
+        }
+    </div>
+</main>
+
+
+
+<SimpleWithConfirmModal OnConfirm="NavigateToHistory" @ref="_errorModal" />
+
+@code {
+    [Parameter]
+    public long Id { get; set; }
+
+    private SimpleWithConfirmModal? _errorModal;
+    private ComicResponse? _comicResponseModel;
+    private bool _isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        StateHasChanged();
+
+        var result = await comicManager.GetComicAsync(Id);
+
+        if (result.Succeeded)
+        {
+            _comicResponseModel = result.Data;
+        }
+        else
+        {
+            _errorModal!.Show(result.GetMessages());
+        }
+
+        _isLoading = false;
+        StateHasChanged();
+
+        await base.OnInitializedAsync();
+    }
+
+    private void NavigateToHistory()
+    {
+        navManager.NavigateTo("/history");
+    }
+}

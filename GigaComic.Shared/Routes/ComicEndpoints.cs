@@ -17,10 +17,10 @@ namespace GigaComic.Shared.Routes
         public const string Comic = "api/Comic/Comic";
         public const string Comics = "api/Comic/Comics";
 
-        public static string GetComic(Guid id)
+        public static string GetComic(long id)
             => $"{Comic}?id={id}";
 
-        public static string GetComicResults(Guid id, int page = 1, int pageSize = PageConstants.DefaultPageSize)
-            => $"{Comics}?id={id}&page={page}&pageSize={pageSize}";
+        public static string GetComics(int page = 1, int pageSize = PageConstants.DefaultPageSize)
+            => $"{Comics}?page={page}&pageSize={pageSize}";
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GigaComic.Shared.Requests.Comic;
 using GigaComic.Shared.Responses.Comic;
 using GigaComic.Shared.Responses;
+using GigaComic.Shared.Constants;
 
 namespace GigaComic.Client.Managers.Comic
 {
@@ -14,5 +15,8 @@ namespace GigaComic.Client.Managers.Comic
 
         Task<IResult<ComicResultResponse>> CompleteSetupStageAsync(ComicSetupRequest model);
 
+        Task<IResult<ComicResponse>> GetComicAsync(long id);
+
+        Task<PaginatedResult<ComicResponse>> GetComicsAsync(int page, int pageSize = PageConstants.DefaultPageSize);
     }
 }

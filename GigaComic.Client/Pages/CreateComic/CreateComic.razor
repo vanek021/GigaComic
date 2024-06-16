@@ -1,5 +1,6 @@
 ﻿@page "/"
 
+@using GigaComic.Client.Components.Modal
 @using GigaComic.Client.Managers.Comic
 @using GigaComic.Shared.Requests.Comic
 @using GigaComic.Shared.Responses.Comic
@@ -20,20 +21,16 @@
         else
         {
             <CreateTheme CreateComicRequestModel="CreateComicRequestModel" OnContinueCallback="CreateComicAsync" />
-
-            @if (!string.IsNullOrEmpty(_createComicError))
-            {
-                <div class="validation-message">@_createComicError</div>
-            }
         }
     </div>
 </main>
 
+<SimpleModal @ref="_errorModal" />
+
 @code {
     private ComicResponse? ComicResponseModel { get; set; } = null;
     private CreateComicRequest CreateComicRequestModel { get; set; } = new();
-
-    private string? _createComicError;
+    private SimpleModal? _errorModal;
 
     private async Task CreateComicAsync()
     {
@@ -42,11 +39,10 @@
         if (result.Succeeded)
         {
             ComicResponseModel = result.Data;
-            _createComicError = null;
         }
         else
         {
-            _createComicError = result.GetMessages();
+            _errorModal!.ShowError(result.GetMessages());
         }
 
         StateHasChanged();

@@ -10,7 +10,7 @@ namespace GigaComic.Client.Components.Modal
         protected ConfirmationModal? _confirmationModal;
         protected bool _isError = false;
 
-        public virtual void OnConfirm()
+        public virtual void Confirm()
         {
             _confirmationModal?.Hide();
             StateHasChanged();

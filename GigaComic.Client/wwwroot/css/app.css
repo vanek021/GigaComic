@@ -1130,13 +1130,20 @@ a.button {
 }
 
 .comic-history {
-    display: flex;
+/*    display: flex;
     gap: 60px;
     column-gap: 60px;
+    flex-wrap: wrap;
+    flex-direction: row;*/
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 60px;
+    grid-row-gap: 120px;
 }
 
 .comic-history__item {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
+    box-sizing: border-box;
 }
 
     .comic-history__item:hover {

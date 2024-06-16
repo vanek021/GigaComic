@@ -21,7 +21,7 @@ namespace GigaComic.Services
         {
             var comics = await Get()
                 .Where(c => c.UserId == userId)
-                .ToPagedListAsync(page, pageSize);
+                .ToPagedListAsync(pageSize, page);
 
             var mappedItems = _mapper.Map<List<ComicResponse>>(comics);
 

@@ -1,0 +1,12 @@
+﻿@inherits BaseModal
+
+<ConfirmationModal @ref="_confirmationModal" OnConfirm="OnConfirm">
+    <div style="@(_isError ? "text-align: center; color: var(--color-main);" : "text-align: center;")">@ModalText</div>
+</ConfirmationModal>
+
+@code {
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    public override string InitialText { get; set; }
+}

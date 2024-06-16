@@ -1,4 +1,5 @@
-﻿using GigaComic.Shared.Extensions;
+﻿using GigaComic.Shared.Constants;
+using GigaComic.Shared.Extensions;
 using GigaComic.Shared.Requests.Comic;
 using GigaComic.Shared.Responses;
 using GigaComic.Shared.Responses.Comic;
@@ -61,6 +62,20 @@ namespace GigaComic.Client.Managers.Comic
         {
             var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CreateComicByTheme, model);
             var result = await response.ToResultAsync<ComicResponse>();
+            return result;
+        }
+
+        public async Task<IResult<ComicResponse>> GetComicAsync(long id)
+        {
+            var response = await _httpClient.GetAsync(ComicEndpoints.GetComic(id));
+            var result = await response.ToResultAsync<ComicResponse>();
+            return result;
+        }
+
+        public async Task<PaginatedResult<ComicResponse>> GetComicsAsync(int page, int pageSize = PageConstants.DefaultPageSize)
+        {
+            var response = await _httpClient.GetAsync(ComicEndpoints.GetComics(page, pageSize));
+            var result = await response.ToPaginatedResultAsync<ComicResponse>();
             return result;
         }
     }

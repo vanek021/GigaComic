@@ -1,29 +1,99 @@
 ﻿@page "/history"
 
+@using GigaComic.Client.Components.Modal
+@using GigaComic.Client.Managers.Comic
+@using GigaComic.Shared.Constants
+@using GigaComic.Shared.Responses
+@using GigaComic.Shared.Responses.Comic
+
 @attribute [Authorize]
+
+@inject IComicManager comicManager
+@inject NavigationManager navManager
 
 <PageTitle>История</PageTitle>
 
 <main class="page page__bg-gray">
     <div class="content">
-
         <h2 class="content__title">Ранее созданные комиксы</h2>
-
         <div class="comic-container">
-            <div class="comic-history">
-                <div class="comic-history__item">
-                    <img src="/images/slide-example.png" />
-                    <div class="comic-history__item-title">Я ограбил банк</div>
-                </div>
-                <div class="comic-history__item">
-                    <img src="/images/slide-example.png" />
-                    <div class="comic-history__item-title">Я ограбил банк</div>
-                </div>
-                <div class="comic-history__item">
-                    <img src="/images/slide-example.png" />
-                    <div class="comic-history__item-title">Я ограбил банк</div>
-                </div>
-            </div>
+            @if (!_isLoading)
+            {
+                @if (_comicsPaged is not null && _comicsPaged.Data.Any())
+                {
+                    <div class="comic-history">
+                        @foreach (var comic in _comicsPaged.Data)
+                        {
+                            <div class="comic-history__item" @onclick="@(_ => NavigateToComic(comic.Id))">
+                                <div class="comic-history__item-wrapper">
+                                    <img src="/images/slide-example.png" />
+                                    <div class="comic-history__item-title">@comic.Theme</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <Pagination @bind-Current="_currentPage"
+                                PageSize="PageConstants.DefaultPageSize"
+                                Total="_comicsPaged!.TotalCount"
+                                OnChange="@(async (args) => await NavigateToPage(args.Page))"
+                                ShowSizeChanger="false"
+                                Class="mt-5"/>
+                }
+                else
+                {
+                    <div>У вас еще нет созданных комиксов.</div>
+                }
+            }
+            else
+            {
+                <CenteredLoader />
+            }
         </div>
     </div>
 </main>
+
+<SimpleModal @ref="_errorModal" />
+
+@code {
+    private int _currentPage = 1;
+    private PaginatedResult<ComicResponse>? _comicsPaged;
+    private SimpleModal? _errorModal;
+    private bool _isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetItemsAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task GetItemsAsync()
+    {
+        _isLoading = true;
+        StateHasChanged();
+
+        var result = await comicManager.GetComicsAsync(_currentPage);
+
+        if (result.Succeeded)
+        {
+            _comicsPaged = result;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
+
+        _isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task NavigateToPage(int page)
+    {
+        _currentPage = page;
+        await GetItemsAsync();
+    }
+
+    private void NavigateToComic(long comicId)
+    {
+        navManager.NavigateTo($"/history/{comicId}");
+    }
+}

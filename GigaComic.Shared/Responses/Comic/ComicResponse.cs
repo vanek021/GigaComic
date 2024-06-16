@@ -7,6 +7,7 @@ namespace GigaComic.Shared.Responses.Comic
     {
         public long Id { get; set; }
         public ComicStage Stage { get; set; }
+        public string Theme { get; set; }
 
         public List<ComicAbstractResponse> ComicAbstracts { get; set; } = new();
 

@@ -2,6 +2,7 @@
 @using GigaComic.Client.Components.Comic.Result
 @using GigaComic.Client.Components.Comic.Setup
 @using GigaComic.Client.Components.Comic.Story
+@using GigaComic.Client.Components.Modal
 @using GigaComic.Client.Managers.Comic
 @using GigaComic.Shared.Requests.Comic
 @using GigaComic.Shared.Responses.Comic
@@ -25,20 +26,20 @@
                     OnContinueCallback="CompleteComicSetupAsync" />
         break;
     case ComicStage.Completed:
-        <ComicResult ComicResultResponseModel="ComicResultResponseModel" />
+        <ComicResult ComicResponseModel="ComicResponseModel" />
         break;
     default:
         throw new ArgumentException();
 }
 
-
+<SimpleModal @ref="_errorModal" />
 
 @code {
     [Parameter]
     public ComicResponse ComicResponseModel { get; set; }
-    public ComicResultResponse ComicResultResponseModel { get; set; }
 
     private ComicSetupRequest _comicSetupRequest { get; set; } = new();
+    private SimpleModal? _errorModal;
 
     private async Task CompleteAbstractsCreationAsync()
     {
@@ -60,7 +61,15 @@
 
         var result = await comicManager.CompleteAbstractCreationStageAsync(request);
 
-        ComicResponseModel = result.Data;
+        if (result.Succeeded)
+        {
+            ComicResponseModel = result.Data;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
+
         StateHasChanged();
     }
 
@@ -84,15 +93,31 @@
 
         var result = await comicManager.CompleteStoriesCreationStageAsync(request);
 
-        ComicResponseModel = result.Data;
+        if (result.Succeeded)
+        {
+            ComicResponseModel = result.Data;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
+
         StateHasChanged();
     }
 
     private async Task CompleteComicSetupAsync()
     {
         var result = await comicManager.CompleteSetupStageAsync(_comicSetupRequest);
-        ComicResponseModel = result.Data;
-        ComicResultResponseModel = result.Data;
+
+        if (result.Succeeded)
+        {
+            ComicResponseModel = result.Data;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
+
         StateHasChanged();
     }
 }
