@@ -21,5 +21,7 @@ namespace GigaComic.Models.Entities.Comic
         public long UserId { get; set; }
 
         public virtual List<ComicAbstract> ComicAbstracts { get; set; }
+        public virtual List<ComicRawImage> ComicRawImages { get; set; }
+        public virtual List<ComicCompositeImage> ComicCompositeImages { get; set; }
     }
 }
