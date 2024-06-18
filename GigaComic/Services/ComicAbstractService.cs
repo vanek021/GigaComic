@@ -1,6 +1,8 @@
 ﻿using GigaComic.Data;
+using GigaComic.Data.Migrations;
 using GigaComic.Models.Entities.Comic;
 using GigaComic.Modules.GigaChat;
+using System.Text.RegularExpressions;
 
 namespace GigaComic.Services
 {
@@ -23,9 +25,17 @@ namespace GigaComic.Services
 
             var answer = await _chatClient.GenerateAnswer(prompt);
 
-            return answer.Split("\n")
+            var answers = answer.Split("\n")
                 .Where(x => !string.IsNullOrEmpty(x))
-                .Select(x => new ComicAbstract() { Comic = comic, Name = x })
+            .ToList();
+
+            if (answers.Count < 3)
+            {
+                string[] sentences = Regex.Split(answer, @"(?<=[\.!\?])\s+");
+                answers = [.. sentences];
+            } 
+
+            return answers.Select(x => new ComicAbstract() { Comic = comic, Name = x })
                 .ToList();
         }
 

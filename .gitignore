@@ -326,3 +326,4 @@ ASALocalRun/
 
 MoxControl/wwwroot/uploads/
 */appsettings*.json
+/GigaComic.Client/wwwroot/appsettings.json

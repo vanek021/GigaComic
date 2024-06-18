@@ -1,4 +1,5 @@
 using GigaComic.Core.Extensions;
+using GigaComic.Core.Server.Extensions;
 using GigaComic.Data;
 using GigaComic.Extensions;
 using GigaComic.Modules.Kandinsky;
@@ -45,6 +46,8 @@ builder.Services.AddHttpClient<KandinskyApi>(options =>
     options.DefaultRequestHeaders.Add("X-Key", builder.Configuration["Kandinsky:Key"]);
     options.DefaultRequestHeaders.Add("X-Secret", builder.Configuration["Kandinsky:Secret"]);
 });
+
+builder.Services.AddFileSystemBucketStorage(builder.Environment.WebRootPath, "default");
 
 builder.Services.AddControllers();
 builder.Services.AddAppServices(builder.Configuration);
