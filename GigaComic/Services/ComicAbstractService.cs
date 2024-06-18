@@ -37,7 +37,22 @@ namespace GigaComic.Services
                 .Where(x => !string.IsNullOrEmpty(x))
                 .ToList();
 
-            if (plots.Count < abstracts.Count)
+            var j = 0;
+            var retryCount = 5;
+            while ((plots.Count < abstracts.Count || 
+                plots.Any(p => abstracts.Any(a => a.Name == p))) &&
+                j < retryCount)
+            {
+                var prompt = "Сюжетов должно быть 5 (пять). " +
+                    "Сгенерируй мне 5 (пять) сюжетов каждая в НОВОЙ СТРОКЕ. " +
+                    "Ты молодец у тебя получится";
+                answer = await _chatClient.GenerateAnswer(prompt);
+                plots = answer.Split("\n")
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToList();
+            }
+            if (plots.Count < abstracts.Count ||
+                plots.Any(p => abstracts.Any(a => a.Name == p)))
                 throw new Exception("Ai vashe kapec dawn");
 
             for (int i = 0; i < abstracts.Count; i++)
@@ -49,8 +64,8 @@ namespace GigaComic.Services
         public string BuildPromptForPlotAdd(List<ComicAbstract> abstracts)
         {
             var strAbstracts = string.Join("\n", abstracts.Select(x => x.Name));
-            var prompt = "Тебе даны действия комикса. Напиши ОДИН развернутый сюжет для каждого действия.\r\n" +
-                         "Каждый сюжет с новой строки. Один сюжет ОДНА строка \r\n" +
+            var prompt = "Тебе даны краткие сюжеты действий комикса. Напиши ОДИН развернутый сюжет для каждого действия.\r\n" +
+                         "Каждый сюжет с новой строки. Один сюжет ОДНА строка. Развернутые сюжеты должны быть длиннее кратких сюжетов. \r\n Действия: \r\n" +
                          strAbstracts;
 
             return prompt;
