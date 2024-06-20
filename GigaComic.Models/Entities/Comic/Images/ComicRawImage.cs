@@ -10,5 +10,6 @@ namespace GigaComic.Models.Entities.Comic
     public class ComicRawImage : AbstractComicImage
     {
         public string GeneratingRequest { get; set; }
+        public string Title { get; set; }
     }
 }
