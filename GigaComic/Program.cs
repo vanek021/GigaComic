@@ -4,6 +4,7 @@ using GigaComic.Data;
 using GigaComic.Extensions;
 using GigaComic.Modules.ComicRenderer;
 using GigaComic.Modules.Kandinsky;
+using GigaComic.Services.Generation;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.OpenApi.Models;
@@ -82,5 +83,7 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GigaGomic")
 app.UseStaticFiles();
 
 app.UseHangfireDashboard();
+
+RecurringJob.AddOrUpdate<ComicImageGenerationService>("GenerateRawImages", c => c.GenerateRawImages(), Cron.MinuteInterval(3));
 
 app.Run();

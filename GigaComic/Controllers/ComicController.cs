@@ -218,5 +218,13 @@ namespace GigaComic.Controllers
                 return BlazorBadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route(ComicEndpoints.CompleteRawImagesEditingStage)]
+        public async Task<IActionResult> CompleteRawImagesEditing(CompleteRawImagesEditingRequest model)
+        {
+            // TODO: Саша
+            throw new NotImplementedException();
+        }
     }
 }

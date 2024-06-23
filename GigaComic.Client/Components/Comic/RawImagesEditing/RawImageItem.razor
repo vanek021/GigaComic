@@ -15,7 +15,7 @@ else if (RawImage.State == RawImageState.Processed)
 {
     <div @onclick="@(_ => OnClick.InvokeAsync(RawImage))" class="@(IsSelected ? "raw-preview-item raw-preview-item__selected" : "raw-preview-item")">
         <Image Class="raw-preview__image" Preview="false" Src="@($"{_apiUrl}{RawImage.PublicUrl}")" />
-        <span class="raw-preview__title">@RawImage.Title.BreakByMaxLength(50)</span>
+        <span class="raw-preview__title">@(string.IsNullOrEmpty(RawImage.Title) ? "" : RawImage.Title.BreakByMaxLength(50))</span>
     </div>
 }
 else

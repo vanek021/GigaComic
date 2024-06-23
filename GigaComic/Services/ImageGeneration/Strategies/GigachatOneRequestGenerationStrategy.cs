@@ -38,8 +38,10 @@ namespace GigaComic.Services.ImageGeneration.Strategies
 
             foreach (var splittedItem in splitted)
             {
-                var kandinskyPrompt = splittedItem.Split(';')[0];
-                var gigaChatDesc = splittedItem.Length > 1 ? splittedItem.Split(';')[1] : kandinskyPrompt;
+                var splittedQuery = splittedItem.Split(';');
+
+                var kandinskyPrompt = splittedQuery[0];
+                var gigaChatDesc = splittedQuery.Length > 1 ? splittedQuery[1] : kandinskyPrompt;
 
                 gigaChatDesc = gigaChatDesc.Replace("Описание:", "").Trim();
 
@@ -59,7 +61,7 @@ namespace GigaComic.Services.ImageGeneration.Strategies
 
             comic.ComicRawImages = result;
 
-            BackgroundJob.Enqueue<ComicImageGenerationService>(c => c.GenerateRawImages());
+            RecurringJob.TriggerJob("GenerateRawImages");
 
             return result;
         }

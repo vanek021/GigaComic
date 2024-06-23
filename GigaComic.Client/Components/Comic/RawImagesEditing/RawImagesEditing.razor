@@ -82,6 +82,10 @@
                                     <TextArea Style="field-sizing: content;" @bind-Value="_selectedRawImage.GeneratingRequest" />
                                 </div>
                                 <ButtonWithLoader OnClickCallback="Regenerate" @ref="_regenerateBtn" IsDisabled="_isRegenerating" Height="32" Width="200" Text="Перегенерировать" />
+                                @if (!string.IsNullOrEmpty(_selectedRawImage.PublicUrl))
+                                {
+                                    <DownloadButton Type="@ButtonType.Primary" Icon="@IconType.Outline.Download" Url="@($"{_apiUrl}{_selectedRawImage.PublicUrl}")" FileName="@($"rawImage_{_selectedRawImage.Id}.png")" />
+                                }
                             </div>
                         </div>
                     </div>
@@ -97,7 +101,26 @@
     </div>
 
     <div class="comic-container__actions">
-        <ButtonWithLoader IsDisabled="_isRegenerating" Text="Продолжить" />
+        <div class="comic-container__actions-info">
+            @if (ComicResponseModel!.ComicRawImages.Any(c => c.State == RawImageState.Created || c.State == RawImageState.Fail))
+            {
+                <Alert Type="@AlertType.Error"
+                       Style="height: 42px; margin-bottom: 20px;"
+                       Class="actions-alert"
+                       Description="Ошибка: не все изображения были успешно сгенерированы. Проверьте список изображений." />
+            }
+
+            @if (ComicResponseModel!.ComicRawImages.Any(c => string.IsNullOrEmpty(c.Title)))
+            {
+                <Alert Type="@AlertType.Error"
+                       Style="height: 42px;"
+                       Class="actions-alert"
+                       Description="Ошибка: у одного из изображений отсутствует текстовое описание." />
+            }
+        </div>
+        <div>
+            <ButtonWithLoader IsDisabled="_isRegenerating" Text="Продолжить" />
+        </div>
     </div>
 </div>
 

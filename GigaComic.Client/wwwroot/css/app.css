@@ -1207,8 +1207,9 @@ a.button {
 .comic-container__actions {
     margin-top: 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     column-gap: 10px;
+
 }
 
 .svg-white svg {
@@ -1416,3 +1417,11 @@ a.button {
 .raw-failed-image {
     width: 100%;
 }
+
+.actions-alert {
+    height: 42px;
+}
+
+    .actions-alert .ant-alert-description {
+        line-height: 10px;
+    }

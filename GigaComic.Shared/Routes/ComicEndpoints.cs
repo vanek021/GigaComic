@@ -13,6 +13,7 @@ namespace GigaComic.Shared.Routes
         public const string CompleteAbstractCreationStage = "api/Comic/CompleteAbstractCreationStage";
         public const string CompleteStoriesCreationStage = "api/Comic/CompleteStoriesCreationStage";
         public const string CompleteSetupStage = "api/Comic/CompleteSetupStage";
+        public const string CompleteRawImagesEditingStage = "api/Comic/CompleteRawImagesEditingStage";
         public const string RegenerateAbstractStory = "api/Comic/RegenerateAbstractStory";
         public const string Comic = "api/Comic/Comic";
         public const string Comics = "api/Comic/Comics";
