@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
+    <ProjectReference Include="..\GigaComic.Modules.ComicRenderer\GigaComic.Modules.ComicRenderer.csproj" />
     <ProjectReference Include="..\GigaComic.Shared\GigaComic.Shared.csproj" />
     <ProjectReference Include="..\GigaComic.Data\GigaComic.Data.csproj" />
     <ProjectReference Include="..\GigaComic.Infrastructure\GigaComic.Infrastructure.csproj" />

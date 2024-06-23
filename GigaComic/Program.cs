@@ -2,6 +2,7 @@ using GigaComic.Core.Extensions;
 using GigaComic.Core.Server.Extensions;
 using GigaComic.Data;
 using GigaComic.Extensions;
+using GigaComic.Modules.ComicRenderer;
 using GigaComic.Modules.Kandinsky;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -67,7 +68,6 @@ builder.Services.AddAppServices(builder.Configuration);
 var app = builder.Build();
 
 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader());
-
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
 
