@@ -7,19 +7,26 @@
 
 <Spin Spinning="isSaveInProcess">
     <div class="dragdrop d-flex" ondragover="event.preventDefault();">
-        @foreach (var item in Items)
+        @if (Items != null && Items.Any())
         {
-            @if (ItemTemplate is not null)
+            @foreach (var item in Items)
             {
-                <div class="dragdrop__item"
-                     draggable="true"
-                     @key="Items.IndexOf(item)"
-                     @ondrop="@(async () => await Drop(item))"
-                     @ondrag="@(()=> Drag(item))"
-                     id="dragDropItem_@(item.Order)">
-                    @ItemTemplate(item)
-                </div>
+                @if (ItemTemplate is not null)
+                {
+                    <div class="dragdrop__item"
+                         draggable="true"
+                         @key="Items.IndexOf(item)"
+                         @ondrop="@(async () => await Drop(item))"
+                         @ondrag="@(()=> Drag(item))"
+                         id="dragDropItem_@(item.Order)">
+                        @ItemTemplate(item)
+                    </div>
+                }
             }
+        }
+        else
+        {
+            <div class="dragdrop__placeholder">Нет ни одного активного тезиса...</div>
         }
     </div>
 </Spin>

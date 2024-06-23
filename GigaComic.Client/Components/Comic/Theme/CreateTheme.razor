@@ -1,40 +1,60 @@
-﻿@using GigaComic.Shared.Requests.Comic
+﻿@using GigaComic.Client.Managers.Comic
+@using GigaComic.Shared.Requests.Comic
+
+@inject IComicManager comicManager
 
 <h2 class="content__title">Давайте придумаем тему комикса</h2>
+<div class="comic-container">
+    @if (_isLoading)
+    {
+        <CenteredLoader />
+    }
+    else
+    {
+        <EditForm Model="CreateComicRequestModel" OnValidSubmit="OnContinue">
+            <DataAnnotationsValidator />
 
-<EditForm Model="CreateComicRequestModel" OnValidSubmit="OnContinue">
-    <DataAnnotationsValidator />
+            <div class="d-flex justify-content-center" style="width: 100%; margin: 0 auto;">
 
-    <div class="d-flex justify-content-center" style="width: 100%; margin: 0 auto;">
+                <div style="width: 60%;">
+                    <Input Style="height: 48px;"
+                           Class="theme__input"
+                           @bind-Value="CreateComicRequestModel!.Theme"
+                           TValue="string" />
+                    <ValidationMessage For="@(() => CreateComicRequestModel.Theme)" />
+                    <div class="theme__placeholder">
+                        Введите не большое, но при этом конкретное описание темы комикса
+                        <br />
+                        Пример хорошего описания:
+                        <br />
+                        - Чебурашка ограбил банк, но был пойман крокодилом Геной и сдан в полицию.
+                        <br />
+                        Пример плохого описания:
+                        <br />
+                        - Я ограбил банк.
+                    </div>
+                    @if (_lastThemes != null && _lastThemes.Any())
+                    {
+                        <div class="last-themes__container" style="margin-top: 20px;">
+                            @foreach (var lastTheme in _lastThemes)
+                            {
+                                <Tag Class="last-themes__item" OnClick="(_ => FillTheme(lastTheme))">@lastTheme</Tag>
+                            }
+                        </div>
+                    }
+                </div>
 
-        <div style="width: 60%;">
-            <Input Style="height: 48px;"
-                   Class="theme__input"
-                   @bind-Value="CreateComicRequestModel!.Theme"
-                   TValue="string" />
-            <ValidationMessage For="@(() => CreateComicRequestModel.Theme)" />
-            <div class="theme__placeholder">
-                Введите не большое, но при этом конкретное описание темы комикса
-                <br />
-                Пример хорошего описания:
-                <br />
-                - Чебурашка ограбил банк, но был пойман крокодилом Геной и сдан в полицию.
-                <br />
-                Пример плохого описания:
-                <br />
-                - Я ограбил банк.
+                <ButtonWithLoader Type="submit"
+                                  Text="Продолжить"
+                                  Width="148"
+                                  Height="48"
+                                  @ref="_btn" />
+
             </div>
-        </div>
 
-        <ButtonWithLoader Type="submit"
-                          Text="Продолжить"
-                          Width="148"
-                          Height="48"
-                          @ref="_btn" />
-
-    </div>
-
-</EditForm>
+        </EditForm>
+    }
+</div>
 
 @code {
     [Parameter]
@@ -44,11 +64,35 @@
     public EventCallback OnContinueCallback { get; set; }
 
     private ButtonWithLoader? _btn;
+    private bool _isLoading;
+    private List<string> _lastThemes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+        StateHasChanged();
+
+        var lastThemesResult = await comicManager.GetLastComicThemesAsync();
+
+        if (lastThemesResult.Succeeded)
+            _lastThemes = lastThemesResult.Data ?? new();
+
+        _isLoading = false;
+        StateHasChanged();
+
+        await base.OnInitializedAsync();
+    }
 
     private async Task OnContinue()
     {
         _btn!.MarkAsLoading();
         await OnContinueCallback.InvokeAsync();
         _btn!.MarkAsDefault();
+    }
+
+    private void FillTheme(string theme)
+    {
+        CreateComicRequestModel!.Theme = theme;
+        StateHasChanged();
     }
 }

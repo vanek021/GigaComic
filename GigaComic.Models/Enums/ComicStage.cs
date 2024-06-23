@@ -18,7 +18,10 @@ namespace GigaComic.Models.Enums
         [Display(Name = "Настройка комикса")]
         ComicSetup = 2,
 
+        [Display(Name = "Предпросмотр изображений")]
+        RawImagesEditing = 4,
+
         [Display(Name = "Завершен")]
-        Completed = 3
+        Completed = 5
     }
 }

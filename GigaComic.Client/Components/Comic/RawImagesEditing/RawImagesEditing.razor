@@ -1,0 +1,52 @@
+﻿<h2 class="content__title">
+    Почти все готово. Давайте проверим, что все идет как надо:
+</h2>
+
+<div class="comic-container raw">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="raw-container">
+                <div class="raw-preview-item raw-preview-item__selected">
+                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
+                    <div>Пожалуйста, подождите..</div>
+                </div>
+                <div class="raw-preview-item">
+                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
+                    <div>Название каритнки</div>
+                </div>
+                <div class="raw-preview-item">
+                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
+                    <div>Название каритнки</div>
+                </div>
+                <div class="raw-preview-item">
+                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
+                    <div>Название каритнки</div>
+                </div>
+                <div class="raw-preview-item">
+                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
+                    <div>Название каритнки</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="raw-extended-container">
+                <div class="raw-extended-image">
+                    <Image Width="200px" Src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
+                </div>
+                <Alert Message="Изображение не было сгенерировано. Причиной может быть запрос, который нарушает правила использования сервиса. Пожалуйста, переформулируйте запрос." Type="@AlertType.Error" />
+                <Input TValue="string" />
+                <Input TValue="string" />
+                <ButtonWithLoader Text="Перегенерировать" />
+
+            </div>
+        </div>
+    </div>
+
+    <div class="comic-container__actions">
+        <ButtonWithLoader Text="Продолжить" />
+    </div>
+</div>
+
+@code {
+    private bool _isEditingTitle = false;
+}

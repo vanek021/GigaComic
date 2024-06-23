@@ -3,7 +3,11 @@ using GigaComic.Core.Server.Extensions;
 using GigaComic.Data;
 using GigaComic.Extensions;
 using GigaComic.Modules.Kandinsky;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +44,14 @@ builder.Services.AddSwaggerGen(c =>
             });
 });
 
+builder.Services.AddHangfire(config =>
+{
+    config.UsePostgreSqlStorage(connectionString, new PostgreSqlStorageOptions() { SchemaName = "Hangfire" });
+    config.UseSerializerSettings(new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+});
+
+builder.Services.AddHangfireServer();
+
 builder.Services.AddHttpClient<KandinskyApi>(options =>
 {
     options.BaseAddress = new Uri(builder.Configuration["Kandinsky:BaseUri"]);
@@ -66,5 +78,7 @@ app.MapControllers();
 
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GigaGomic"));
+
+app.UseHangfireDashboard();
 
 app.Run();

@@ -13,10 +13,12 @@ namespace GigaComic.Client.Managers.Comic
 
         Task<IResult<ComicResponse>> CompleteStoriesCreationStageAsync(CompleteStoriesCreationRequest model);
 
-        Task<IResult<ComicResultResponse>> CompleteSetupStageAsync(ComicSetupRequest model);
+        Task<IResult<ComicResponse>> CompleteSetupStageAsync(ComicSetupRequest model);
 
         Task<IResult<ComicResponse>> GetComicAsync(long id);
 
         Task<PaginatedResult<ComicResponse>> GetComicsAsync(int page, int pageSize = PageConstants.DefaultPageSize);
+
+        Task<IResult<List<string>?>> GetLastComicThemesAsync();
     }
 }

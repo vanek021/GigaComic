@@ -2,6 +2,7 @@
 using GigaComic.Models.Entities.Comic;
 using GigaComic.Models.Enums;
 using GigaComic.Services;
+using GigaComic.Services.Generation;
 using GigaComic.Shared.Constants;
 using GigaComic.Shared.Requests.Comic;
 using GigaComic.Shared.Responses.Comic;
@@ -17,13 +18,16 @@ namespace GigaComic.Controllers
     {
         private readonly ComicService _comicService;
         private readonly ComicAbstractService _comicAbstractService;
+        private readonly ComicImageGenerationService _comicImageGenerationService;
         private readonly IMapper _mapper;
 
-        public ComicController(ComicService comicService, ComicAbstractService comicAbstractService, IMapper mapper)
+        public ComicController(ComicService comicService, ComicAbstractService comicAbstractService, IMapper mapper, 
+            ComicImageGenerationService comicImageGenerationService)
         {
             _comicService = comicService;
             _comicAbstractService = comicAbstractService;
             _mapper = mapper;
+            _comicImageGenerationService = comicImageGenerationService;
         }
 
         [Route(ComicEndpoints.CreateComicByTheme)]
@@ -127,7 +131,11 @@ namespace GigaComic.Controllers
 
                 _mapper.Map(model, comic);
 
+                comic.Stage = ComicStage.RawImagesEditing;
+
                 _comicService.Update(comic);
+
+                await _comicImageGenerationService.PrepareRawImages(comic);
 
                 return BlazorOk(_mapper.Map<ComicResponse>(comic));
             }
@@ -167,6 +175,23 @@ namespace GigaComic.Controllers
                 var comics = await _comicService.GetPagedComics(userId, page, pageSize);
 
                 return PaginatedBlazorOk(comics);
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route(ComicEndpoints.LastThemes)]
+        public async Task<IActionResult> GetLastComicThemes()
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var comicThemes = await _comicService.GetLastComicsThemes(userId);
+
+                return BlazorOk(comicThemes);
             }
             catch (Exception ex)
             {

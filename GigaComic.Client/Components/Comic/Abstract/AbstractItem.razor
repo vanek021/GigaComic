@@ -1,0 +1,53 @@
+﻿@using GigaComic.Shared.Responses.Comic
+
+@inject IJSRuntime js
+
+@if (IsInactive)
+{
+    <div class="abstracts__item-inactive" @ondblclick="(async _ => await InvokeOnClick())">
+        <textarea type="text" style="width: 95%; resize: none;" @bind="Item!.Name" />
+        <div style="visibility: hidden; height: 0px;">@Item!.Name</div>
+    </div>
+}
+else
+{
+    <div class="abstracts__item">
+        <div @onclick="(async _ => await InvokeOnClose())">
+            <Icon Type="close" Class="first-button" Theme="outline" />
+        </div>
+        <textarea type="text" style="width: 95%; resize: none;" @bind="Item!.Name" />
+        <div style="visibility: hidden; height: 0px;">@Item!.Name</div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback<ComicAbstractResponse> OnClose { get; set; }
+
+    [Parameter]
+    public EventCallback<ComicAbstractResponse> OnClick { get; set; }
+
+    [Parameter]
+    public ComicAbstractResponse Item { get; set; }
+
+    [Parameter]
+    public bool IsEditing { get; set; }
+
+    [Parameter]
+    public bool IsShowCloseBtn { get; set; }
+
+    [Parameter]
+    public bool IsInactive { get; set; }
+
+    private async Task InvokeOnClose()
+    {
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync(Item);
+    }
+
+    private async Task InvokeOnClick()
+    {
+        if (OnClick.HasDelegate)
+            await OnClick.InvokeAsync(Item);
+    }
+}

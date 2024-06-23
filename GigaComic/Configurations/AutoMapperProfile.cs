@@ -14,6 +14,7 @@ namespace GigaComic.Configurations
             CreateMap<CreateComicRequest, Comic>();
             CreateMap<AbstractRequest, ComicAbstract>();
             CreateMap<ComicSetupRequest, Comic>();
+            CreateMap<ComicRawImage, ComicRawImageResponse>();
         }
 
     }

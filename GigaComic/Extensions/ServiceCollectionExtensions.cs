@@ -1,6 +1,7 @@
 ﻿using GigaComic.Configurations;
 using GigaComic.Modules.GigaChat;
 using GigaComic.Services;
+using GigaComic.Services.Generation;
 using Microsoft.Extensions.Options;
 
 namespace GigaComic.Extensions
@@ -14,6 +15,7 @@ namespace GigaComic.Extensions
             serviceCollection.AddScoped<JWTService>();
             serviceCollection.AddScoped<ComicService>();
             serviceCollection.AddScoped<ComicAbstractService>();
+            serviceCollection.AddScoped<ComicImageGenerationService>();
 
             serviceCollection.AddAutoMapper(typeof(AppMappingProfile));
 

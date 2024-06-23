@@ -43,5 +43,7 @@ namespace GigaComic.Data
 
         public DbSet<Comic> Comics { get; set; }
         public DbSet<ComicAbstract> ComicAbstracts { get; set; }
+        public DbSet<ComicRawImage> ComicRawImages { get; set; }
+        public DbSet<ComicCompositeImage> ComicCompositeImages { get; set; }
     }
 }

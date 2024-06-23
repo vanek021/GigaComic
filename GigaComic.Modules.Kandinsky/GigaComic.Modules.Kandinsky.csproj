@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GigaComic.Core\GigaComic.Core.csproj" />
+    <ProjectReference Include="..\GigaComic.Models\GigaComic.Models.csproj" />
   </ItemGroup>
 
 </Project>

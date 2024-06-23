@@ -10,10 +10,7 @@
     <div class="abstracts__container">
         <DragDrop Items="_orderedActiveAbstracts" Context="item" @ref="_dragDrop">
             <ItemTemplate>
-                <div class="abstracts__item">
-                    <div class="close-button" @onclick="(_ => RemoveFromActive(item))">×</div>
-                    <p>@item.Name</p>
-                </div>
+                <AbstractItem Item="item" OnClose="(e => RemoveFromActive(e))" IsInactive="false" />
             </ItemTemplate>
         </DragDrop>
         @if (!string.IsNullOrEmpty(_error))
@@ -25,13 +22,12 @@
     @if (_notActiveAbstracts.Any())
     {
         <div class="abstracts__list">
-            <p>Кликните на тезис, чтобы перенесети его в область выбора</p>
+            <p>Дважды кликните на тезис, чтобы перенесети его в область выбора</p>
+            <p>Вы можете отредактировать тезис, кликнув на его текст</p>
             <div class="d-flex abstracts__list-flex">
                 @foreach (var comicAbstract in _notActiveAbstracts)
                 {
-                    <div class="abstracts__item-inactive" @onclick="(_ => AddToActive(comicAbstract))">
-                        <p>@comicAbstract.Name</p>
-                    </div>
+                    <AbstractItem Item="comicAbstract" OnClick="(_ => AddToActive(comicAbstract))" IsInactive="true" />
                 }
             </div>
         </div>
@@ -128,7 +124,7 @@
 
     private void CreateAbstract(ComicAbstractResponse comicAbstract)
     {
-        _orderedActiveAbstracts = _orderedActiveAbstracts.Append(comicAbstract).ToList();
+        _notActiveAbstracts = _notActiveAbstracts.Append(comicAbstract).ToList();
         StateHasChanged();
     }
 }

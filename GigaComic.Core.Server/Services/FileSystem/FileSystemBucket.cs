@@ -48,6 +48,19 @@
             File.Delete(path);
         }
 
+        public bool TryDeleteObject(string fileName)
+        {
+            try
+            {
+                DeleteObject(fileName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public string GetPublicURL(string fileName)
         {
             fileName = fileName.Replace('\\', '/');

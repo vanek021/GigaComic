@@ -16,6 +16,8 @@ namespace GigaComic.Shared.Routes
         public const string RegenerateAbstractStory = "api/Comic/RegenerateAbstractStory";
         public const string Comic = "api/Comic/Comic";
         public const string Comics = "api/Comic/Comics";
+        public const string LastThemes = "api/Comic/LastComicThemes";
+
 
         public static string GetComic(long id)
             => $"{Comic}?id={id}";

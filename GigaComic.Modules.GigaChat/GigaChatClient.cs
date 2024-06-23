@@ -25,23 +25,30 @@ namespace GigaComic.Modules.GigaChat
 
         public async Task<string> GenerateAnswer(string prompt)
         {
-            var accessToken = await _accessTokenProvider.GetToken();
-
-            var message = new Message()
+            try
             {
-                Content = prompt,
-                Role = "user"
-            };
+                var accessToken = await _accessTokenProvider.GetToken();
 
-            _dialog.Messages.Add(message);
+                var message = new Message()
+                {
+                    Content = prompt,
+                    Role = "user"
+                };
 
-            var request = await CreateGenerateAnswerRequest(_dialog, accessToken.AccessToken);
+                _dialog.Messages.Add(message);
 
-            var response = await _client.SendAsync(request);
+                var request = await CreateGenerateAnswerRequest(_dialog, accessToken.AccessToken);
 
-            var chatResponse = await GetDeserializeObject<ChatResponse>(response);
-            _dialog.Messages.Add(chatResponse.Choices[0].Message);
-            return chatResponse.Choices[0].Message.Content;
+                var response = await _client.SendAsync(request);
+
+                var chatResponse = await GetDeserializeObject<ChatResponse>(response);
+                _dialog.Messages.Add(chatResponse.Choices[0].Message);
+                return chatResponse.Choices[0].Message.Content;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         private async Task<HttpRequestMessage> CreateGenerateAnswerRequest(ChatDialog dialog, string accessToken)

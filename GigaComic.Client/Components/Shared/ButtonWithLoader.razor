@@ -32,6 +32,9 @@
     public bool HideTextWhenLoading { get; set; } = true;
 
     [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
     public EventCallback OnClickCallback { get; set; }
 
     [Parameter]
@@ -39,7 +42,7 @@
 
     private string btnDefaultClass => $"button --default-button --{Color.ToString().ToLower()}";
     private string btnLoadingClass => $"button --default-button --{Color.ToString().ToLower()} --loading";
-    private string btnStyle => Width.HasValue && Height.HasValue ? $"width: {Width}px; height: {Height}px; line-height: 10px;" : "";
+    private string btnStyle => Width.HasValue && Height.HasValue ? $"width: {Width}px; height: {Height}px; line-height: 10px; {Style ?? ""}" : $"{Style ?? ""}";
 
     private string _btnClass = string.Empty;
     private bool _btnDisabled = false;

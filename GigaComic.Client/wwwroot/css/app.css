@@ -928,7 +928,11 @@ a.button {
 }
 
     .abstracts__item-inactive:hover {
-        background-color: #f5f5f5;
+        background-color: #fff;
+        cursor: pointer;
+        border-color: #1890ff;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        color: #40a9ff;
     }
 
     .abstracts__item-inactive p {
@@ -939,6 +943,51 @@ a.button {
     padding: 0px 20px 0px 0px;
     margin: 1rem;
 }
+
+.abstracts__item textarea {
+    padding: 0px 20px 0px 0px;
+    margin: 1rem;
+    cursor: pointer;
+    border: 0;
+    field-sizing: content;
+}
+
+    .abstracts__item textarea:focus {
+        border: 0;
+        outline: none;
+    }
+
+    .abstracts__item textarea:active {
+        border: 0;
+    }
+
+    .abstracts__item textarea:focus-visible {
+        border: 0;
+        outline: none;
+    }
+
+
+.abstracts__item-inactive textarea {
+    padding: 0px 20px 0px 0px;
+    margin: 1rem;
+    cursor: pointer;
+    border: 0;
+    field-sizing: content;
+}
+
+    .abstracts__item-inactive textarea:focus {
+        border: 0;
+        outline: none;
+    }
+
+    .abstracts__item-inactive textarea:active {
+        border: 0;
+    }
+
+    .abstracts__item-inactive textarea:focus-visible {
+        border: 0;
+        outline: none;
+    }
 
 .dragdrop {
     justify-content: flex-start;
@@ -961,20 +1010,27 @@ a.button {
     align-items: center;
 }
 
+.dragdrop__placeholder {
+    margin: 0 auto;
+    font-size: 20px;
+    text-align: center;
+    color: lightgray;
+}
+
 .dragdrop__item--dragged {
     border: 2px solid black !important;
     background-color: red !important;
 }
 
-.close-button {
+.first-button {
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     cursor: pointer;
     text-align: center;
-    line-height: 20px;
+    line-height: 16px;
     font-size: 16px;
     font-weight: bold;
     color: #333;
@@ -984,9 +1040,39 @@ a.button {
     border-bottom: 1px solid black;
 }
 
-    .close-button:hover {
-        background-color: #ccc;
-    }
+.second-button {
+    position: absolute;
+    top: 0px;
+    right: 16px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #fff;
+    /* border-radius: 50%; */
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.first-button:hover {
+    background-color: #fff;
+    cursor: pointer;
+    border-color: #1890ff;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    color: #40a9ff;
+}
+
+.second-button:hover {
+    background-color: #fff;
+    cursor: pointer;
+    border-color: #1890ff;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    color: #40a9ff;
+}
 
 .comic-container {
     padding: 20px 20px;
@@ -1130,7 +1216,7 @@ a.button {
 }
 
 .comic-history {
-/*    display: flex;
+    /*    display: flex;
     gap: 60px;
     column-gap: 60px;
     flex-wrap: wrap;
@@ -1174,4 +1260,95 @@ a.button {
 
 .comic-history__item-badge {
     margin-top: 10px;
+}
+
+.last-themes__container {
+    display: flex;
+    justify-content: start;
+    flex-direction: row;
+    gap: 20px;
+    flex-flow: wrap;
+}
+
+.last-themes__item {
+    border: 1px solid black;
+    padding: 7px;
+    border-color: gray;
+    font-size: 14px;
+}
+
+    .last-themes__item:hover {
+        background-color: #fff;
+        cursor: pointer;
+        border-color: #1890ff;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        color: #40a9ff;
+    }
+
+.skeleton__raw-image {
+    width: 100px;
+    height: 100px;
+}
+
+    .skeleton__raw-image .ant-skeleton-avatar {
+        width: 150px;
+        height: 150px;
+    }
+
+    .skeleton__raw-image .ant-skeleton-header {
+        padding-right: 0px !important;
+    }
+
+.raw-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    border: 1px solid black;
+    height: 100%;
+    padding: 20px;
+    height: 80vh;
+    overflow: auto;
+}
+
+.raw-preview-item {
+    padding: 20px;
+}
+
+    .raw-preview-item:hover {
+        background-color: #fff;
+        cursor: pointer;
+        border: 1px solid #1890ff;
+        border-radius: 5px;
+        background-color: #d9eefc;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        color: #40a9ff;
+    }
+
+    .raw-preview-item.raw-preview-item__selected {
+        background-color: #d9eefc;
+        padding: 20px;
+    }
+
+    .raw-preview-item div {
+        margin: 0 auto;
+        font-size: 14px;
+        text-align: center;
+    }
+
+.comic-container .raw {
+    height: 80vh;
+}
+
+.raw-extended-container {
+    border: 1px solid black;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.raw-extended-image {
+    align-self: center;
+    padding: 20px;
 }

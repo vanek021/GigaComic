@@ -24,31 +24,11 @@ namespace GigaComic.Client.Managers.Comic
             return result;
         }
 
-        public async Task<IResult<ComicResultResponse>> CompleteSetupStageAsync(ComicSetupRequest model)
+        public async Task<IResult<ComicResponse>> CompleteSetupStageAsync(ComicSetupRequest model)
         {
-            //var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteSetupStage, model);
-            //var result = await response.ToResultAsync<ComicResponse>();
-            //return result;
-
-            return await Task.FromResult<IResult<ComicResultResponse>>(Result<ComicResultResponse>.Success(new ComicResultResponse()
-            {
-                Stage = Models.Enums.ComicStage.Completed,
-                Images = new List<ComicImageResponse>()
-                {
-                    new ComicImageResponse()
-                    {
-                        ImageUrl = "/images/slide-example.png"
-                    },
-                    new ComicImageResponse()
-                    {
-                        ImageUrl = "/images/slide-example.png"
-                    },
-                    new ComicImageResponse()
-                    {
-                        ImageUrl = "/images/slide-example.png"
-                    }
-                }
-            }));
+            var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteSetupStage, model);
+            var result = await response.ToResultAsync<ComicResponse>();
+            return result;
         }
 
         public async Task<IResult<ComicResponse>> CompleteStoriesCreationStageAsync(CompleteStoriesCreationRequest model)
@@ -76,6 +56,13 @@ namespace GigaComic.Client.Managers.Comic
         {
             var response = await _httpClient.GetAsync(ComicEndpoints.GetComics(page, pageSize));
             var result = await response.ToPaginatedResultAsync<ComicResponse>();
+            return result;
+        }
+
+        public async Task<IResult<List<string>?>> GetLastComicThemesAsync()
+        {
+            var response = await _httpClient.GetAsync(ComicEndpoints.LastThemes);
+            var result = await response.ToResultAsync<List<string>?>();
             return result;
         }
     }

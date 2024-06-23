@@ -1,7 +1,12 @@
-﻿using GigaComic.Infrastructure.Helpers;
+﻿using GigaComic.Core.Models.Kandinsky.Responses;
+using GigaComic.Core.Services.BucketStorage;
+using GigaComic.Data;
+using GigaComic.Infrastructure.Helpers;
 using GigaComic.Models.Entities.Comic;
 using GigaComic.Modules.GigaChat;
 using GigaComic.Modules.Kandinsky;
+using GigaComic.Services.Generation;
+using Hangfire;
 using System.ComponentModel;
 
 namespace GigaComic.Services.ImageGeneration.Strategies
@@ -9,8 +14,8 @@ namespace GigaComic.Services.ImageGeneration.Strategies
     /// <summary>
     /// Генерация описания вместе с генерацией запросов к Кандинскому
     /// </summary>
-    public class GigachatOneRequestGenerationStrategy(GigaChatClient chatClient, KandinskyApi kandinskyApi) 
-        : AbstractImageGenerationStrategy(chatClient, kandinskyApi)
+    public class GigachatOneRequestGenerationStrategy(GigaChatClient chatClient, KandinskyApi kandinskyApi, IBucket bucket, AppDbContext appDbContext)
+        : AbstractImageGenerationStrategy(chatClient, kandinskyApi, bucket, appDbContext)
     {
         public override async Task<List<ComicRawImage>> GenerateFor(Comic comic)
         {
@@ -23,26 +28,36 @@ namespace GigaComic.Services.ImageGeneration.Strategies
                 $"Выведи результаты в формате: \"Запрос для нейросети;Описание\".\"\n" +
                 $"Содержание: \"{fullStory}\"";
 
+            var unprocessedImages = new List<(string Title, GenerateResponse? GeneratedImage)>();
 
-            CallbackRetrier.ExecuteWithRetries(async () =>
+            var answer = await _chatClient.GenerateAnswer(gigachatPrompt);
+
+            var splitted = answer.Split("\n")
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToList();
+
+            foreach (var splittedItem in splitted)
             {
-                result.Clear();
+                var kandinskyPrompt = splittedItem.Split(';')[0];
+                var gigaChatDesc = splittedItem.Length > 1 ? splittedItem.Split(';')[1] : kandinskyPrompt;
 
-                var answer = await _chatClient.GenerateAnswer(gigachatPrompt);
-
-                var splitted = answer.Split("\n")
-                    .Where(x => !string.IsNullOrEmpty(x))
-                    .ToList();
-
-                foreach (var splittedItem in splitted)
+                result.Add(new ComicRawImage()
                 {
-                    var kandinskyPrompt = splittedItem.Split(';')[0];
-                    var gigaChatDesc = splittedItem.Split(';')[1];
+                    GeneratingRequest = kandinskyPrompt,
+                    Title = gigaChatDesc,
+                    CreatedAt = DateTime.UtcNow,
+                    State = Models.Enums.RawImageState.Created,
+                    Order = splitted.IndexOf(splittedItem),
+                    ComicId = comic.Id
+                });
+            }
 
-                    var kndResponse = await _kandinskyApi.Generate(kandinskyPrompt);
-                    
-                }
-            });
+            _appDbCtx.AddRange(result);
+            await _appDbCtx.SaveChangesAsync();
+
+            comic.ComicRawImages = result;
+
+            BackgroundJob.Enqueue<ComicImageGenerationService>(c => c.GenerateRawImages());
 
             return result;
         }

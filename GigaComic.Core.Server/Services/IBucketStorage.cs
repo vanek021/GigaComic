@@ -20,6 +20,7 @@ namespace GigaComic.Core.Services.BucketStorage
         void ReadObject(string fileName, Stream readStream);
         void WriteObject(string fileName, Stream writeStream);
         void DeleteObject(string fileName);
+        bool TryDeleteObject(string fileName);
         string GetPublicURL(string fileName);
     }
 }

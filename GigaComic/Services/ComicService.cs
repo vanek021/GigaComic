@@ -6,6 +6,7 @@ using GigaComic.Modules.GigaChat;
 using GigaComic.Modules.Kandinsky;
 using GigaComic.Shared.Responses;
 using GigaComic.Shared.Responses.Comic;
+using Microsoft.EntityFrameworkCore;
 using Sakura.AspNetCore;
 
 namespace GigaComic.Services
@@ -17,14 +18,18 @@ namespace GigaComic.Services
         private readonly IMapper _mapper;
         private readonly IBucket _bucket;
 
-        public ComicService(AppDbContext dbContext, IMapper mapper, IBucketStorageService bucketStorageService, KandinskyApi kandinskyApi, GigaChatClient gigaChatClient) : base(dbContext)
+        public ComicService(AppDbContext dbContext, IMapper mapper, IBucketStorageService bucketStorageService/*, KandinskyApi kandinskyApi*/, GigaChatClient gigaChatClient) : base(dbContext)
         {
-            _kandinskyApi = kandinskyApi;
+            //_kandinskyApi = kandinskyApi;
             _gigaChatClient = gigaChatClient;
             _mapper = mapper;
             _bucket = bucketStorageService.GetBucket("comic");
         }
 
+        public async Task CompleteSetup()
+        {
+            var kdPrompts = "";
+        }
 
         public async Task<PaginatedResult<ComicResponse>> GetPagedComics(long userId, int page, int pageSize)
         {
@@ -35,6 +40,19 @@ namespace GigaComic.Services
             var mappedItems = _mapper.Map<List<ComicResponse>>(comics);
 
             return PaginatedResult<ComicResponse>.Success(mappedItems, comics.Count, comics.PageIndex, comics.PageIndex);
+        }
+
+        public async Task<List<string>> GetLastComicsThemes(long userId)
+        {
+            var comicThemes = await Get()
+                .Where(c => c.UserId == userId)
+                .OrderBy(c => c.CreatedAt)
+                .Select(c => c.Theme)
+                .Distinct()
+                .Take(20)
+                .ToListAsync();
+
+            return comicThemes;
         }
     }
 }

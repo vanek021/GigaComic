@@ -1,4 +1,5 @@
 ﻿@using GigaComic.Client.Components.Comic.Abstract
+@using GigaComic.Client.Components.Comic.RawImagesEditing
 @using GigaComic.Client.Components.Comic.Result
 @using GigaComic.Client.Components.Comic.Setup
 @using GigaComic.Client.Components.Comic.Story
@@ -23,7 +24,10 @@
     case ComicStage.ComicSetup:
         <ComicSetup ComicResponseModel="ComicResponseModel"
                     ComicSetupRequestModel="_comicSetupRequest"
-                    OnContinueCallback="CompleteComicSetupAsync" />
+        OnContinueCallback="CompleteComicSetupAsync" />
+        break;
+    case ComicStage.RawImagesEditing:
+        <RawImagesEditing />
         break;
     case ComicStage.Completed:
         <ComicResult ComicResponseModel="ComicResponseModel" />
@@ -96,6 +100,7 @@
         if (result.Succeeded)
         {
             ComicResponseModel = result.Data;
+            _comicSetupRequest.ComicId = result.Data.Id;
         }
         else
         {
