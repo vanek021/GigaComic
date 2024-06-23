@@ -1,4 +1,12 @@
-﻿<h2 class="content__title">
+﻿@using GigaComic.Client.Managers.Comic
+@using GigaComic.Models.Enums
+@using GigaComic.Shared.Requests.Comic
+@using GigaComic.Shared.Responses.Comic
+
+@inject IConfiguration configuration
+@inject IComicManager comicManager
+
+<h2 class="content__title">
     Почти все готово. Давайте проверим, что все идет как надо:
 </h2>
 
@@ -6,47 +14,202 @@
     <div class="row">
         <div class="col-md-3">
             <div class="raw-container">
-                <div class="raw-preview-item raw-preview-item__selected">
-                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
-                    <div>Пожалуйста, подождите..</div>
-                </div>
-                <div class="raw-preview-item">
-                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
-                    <div>Название каритнки</div>
-                </div>
-                <div class="raw-preview-item">
-                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
-                    <div>Название каритнки</div>
-                </div>
-                <div class="raw-preview-item">
-                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
-                    <div>Название каритнки</div>
-                </div>
-                <div class="raw-preview-item">
-                    <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" AvatarShape="round" />
-                    <div>Название каритнки</div>
-                </div>
+                @foreach (var image in ComicResponseModel!.ComicRawImages)
+                {
+                    <RawImageItem IsSelected="image == _selectedRawImage" OnClick="@(raw => Select(raw))" RawImage="image" />
+                }
             </div>
         </div>
         <div class="col-md-9">
-            <div class="raw-extended-container">
-                <div class="raw-extended-image">
-                    <Image Width="200px" Src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
-                </div>
-                <Alert Message="Изображение не было сгенерировано. Причиной может быть запрос, который нарушает правила использования сервиса. Пожалуйста, переформулируйте запрос." Type="@AlertType.Error" />
-                <Input TValue="string" />
-                <Input TValue="string" />
-                <ButtonWithLoader Text="Перегенерировать" />
+            @if (_selectedRawImage != null)
+            {
+                <div class="raw-extended-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="raw-extended-image">
+                                @switch (_selectedRawImage.State)
+                                {
+                                    case RawImageState.Created:
+                                        <Skeleton Class="skeleton__raw-extended-image" Active="true" Avatar="true" Paragraph="false" Title="false" AvatarShape="round" />
+                                        break;
+                                    case RawImageState.Processed:
+                                        <Image Preview="false" Src="@($"{_apiUrl}{_selectedRawImage.PublicUrl}")" />
+                                        break;
+                                    case RawImageState.Fail:
+                                        <Image Class="raw-failed-image" Preview="false" Src="/images/unknown-image.png" />
+                                        break;
+                                    default:
+                                        throw new ArgumentException();
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="raw-extended-actions">
+                                @switch (_selectedRawImage.State)
+                                {
+                                    case RawImageState.Created:
+                                        <Alert Message="Изображение в процессе генерации."
+                                               Type="@AlertType.Warning"
+                                               Style="margin-bottom: 20px;"
+                                               ShowIcon="true" />
+                                        break;
+                                    case RawImageState.Processed:
+                                        <Alert Message="Изображение успешно сгенерировано. При необходимости вы можете изменить запрос и повторить генерацию."
+                                               Type="@AlertType.Success"
+                                               Style="margin-bottom: 20px;"
+                                               ShowIcon="true" />
+                                        break;
+                                    case RawImageState.Fail:
+                                        <Alert Message="Изображение не было сгенерировано. Причиной может быть запрос, который нарушает правила использования сервиса. Пожалуйста, переформулируйте запрос."
+                                               Type="@AlertType.Error"
+                                               Style="margin-bottom: 20px;"
+                                               ShowIcon="true" />
+                                        break;
+                                    default:
+                                        throw new ArgumentException();
+                                }
 
-            </div>
+                                <div class="form-group" style="margin-bottom: 20px;">
+                                    <label>Описание картинки (будет помещено в комикс):</label>
+                                    <TextArea Style="field-sizing: content;" @bind-Value="_selectedRawImage.Title" />
+                                    <div class="theme__placeholder">
+                                        <Icon Type="info-circle" Theme="twotone" TwotoneColor="#0B4DDA" Height="16px" Width="16px" />
+                                        Изменение описание будет сохранено при нажатии на кнопку "Продолжить"
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 20px;">
+                                    <label>Запрос для генерации картинки:</label>
+                                    <TextArea Style="field-sizing: content;" @bind-Value="_selectedRawImage.GeneratingRequest" />
+                                </div>
+                                <ButtonWithLoader OnClickCallback="Regenerate" @ref="_regenerateBtn" IsDisabled="_isRegenerating" Height="32" Width="200" Text="Перегенерировать" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="raw-extended-container justify-content-center">
+                    <div class="raw-extended-image__no-select">Выберите элемент слева для просмотра...</div>
+                </div>
+            }
         </div>
     </div>
 
     <div class="comic-container__actions">
-        <ButtonWithLoader Text="Продолжить" />
+        <ButtonWithLoader IsDisabled="_isRegenerating" Text="Продолжить" />
     </div>
 </div>
 
 @code {
-    private bool _isEditingTitle = false;
+    [Parameter]
+    public ComicResponse ComicResponseModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnForcedRefresh { get; set; }
+
+    private ComicRawImageResponse? _selectedRawImage;
+    private ButtonWithLoader? _regenerateBtn;
+    private bool _isRegenerating = false;
+    private string? _apiUrl;
+    private Timer? _timer;
+
+    protected override Task OnInitializedAsync()
+    {
+        _apiUrl = configuration["apiUrl"];
+        return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var timerCallBack = new TimerCallback(async _ =>
+        {
+            var result = await comicManager.GetComicAsync(ComicResponseModel.Id);
+
+            if (result.Succeeded)
+            {
+                foreach (var rawExternal in result.Data.ComicRawImages.OrderBy(c => c.Order))
+                {
+                    var rawInternal = ComicResponseModel.ComicRawImages.SingleOrDefault(c => c.Id == rawExternal.Id);
+
+                    if (rawInternal != null && rawInternal.State == RawImageState.Created)
+                    {
+                        rawInternal.State = rawExternal.State;
+                        rawInternal.IsCensored = rawExternal.IsCensored;
+                        rawInternal.PublicUrl = rawExternal.PublicUrl;
+
+                        //rawInternal.GeneratingRequest, rawInternal.Title - ignoring
+                        StateHasChanged();
+                    }
+
+                    if (ComicResponseModel.ComicRawImages.All(c => c.State != RawImageState.Created))
+                    {
+                        _timer?.Dispose();
+                        _timer = null;
+                    }
+                }
+            }
+
+            await InvokeAsync(() => StateHasChanged());
+        });
+            int delay = 5000;
+            int interval = 5000;
+
+            if (ComicResponseModel.ComicRawImages.Any(c => c.State == RawImageState.Created))
+            {
+                _timer = new Timer(timerCallBack, null, delay, interval);
+            }
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task Regenerate()
+    {
+        _selectedRawImage!.State = RawImageState.Created;
+
+        _regenerateBtn?.MarkAsLoading();
+        _isRegenerating = true;
+        StateHasChanged();
+
+        var request = new RegenerateRawImageRequest()
+            {
+                GeneratingRequest = _selectedRawImage.GeneratingRequest,
+                Id = _selectedRawImage.Id
+            };
+
+        var result = await comicManager.RegenerateRawImageAsync(request);
+
+        if (result.Succeeded)
+        {
+            var rawInternal = ComicResponseModel!.ComicRawImages.Single(c => c.Id == result.Data.Id);
+
+            rawInternal.State = result.Data.State;
+            rawInternal.PublicUrl = result.Data.PublicUrl;
+            rawInternal.GeneratingRequest = result.Data.GeneratingRequest;
+            rawInternal.IsCensored = result.Data.IsCensored;
+            rawInternal.Title = result.Data.Title;
+        }
+        else
+        {
+            // Something went wrong, need to refresh component just in case
+            if (OnForcedRefresh.HasDelegate)
+            {
+                await OnForcedRefresh.InvokeAsync();
+                _selectedRawImage = null;
+            }
+        }
+
+        _isRegenerating = false;
+        _regenerateBtn?.MarkAsDefault();
+        StateHasChanged();
+    }
+
+    private void Select(ComicRawImageResponse rawImage)
+    {
+        _selectedRawImage = rawImage;
+        StateHasChanged();
+    }
 }

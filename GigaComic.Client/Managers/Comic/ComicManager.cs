@@ -65,5 +65,12 @@ namespace GigaComic.Client.Managers.Comic
             var result = await response.ToResultAsync<List<string>?>();
             return result;
         }
+
+        public async Task<IResult<ComicRawImageResponse>> RegenerateRawImageAsync(RegenerateRawImageRequest model)
+        {
+            var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.RegenerateRawImage, model);
+            var result = await response.ToResultAsync<ComicRawImageResponse>();
+            return result;
+        }
     }
 }

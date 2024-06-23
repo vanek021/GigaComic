@@ -9,6 +9,7 @@ namespace GigaComic.Shared.Responses.Comic
 {
     public class ComicRawImageResponse
     {
+        public long Id { get; set; }
         public string GeneratingRequest { get; set; }
         public string Title { get; set; }
         public bool IsCensored { get; set; }

@@ -79,6 +79,8 @@ app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GigaGomic"));
 
+app.UseStaticFiles();
+
 app.UseHangfireDashboard();
 
 app.Run();

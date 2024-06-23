@@ -15,7 +15,7 @@
         {
             @if (_comicResponseModel is not null)
             {
-                <ComicView ComicResponseModel="_comicResponseModel" />
+                <ComicView OnForcedRefresh="OnForcedRefresh" ComicResponseModel="_comicResponseModel" />
             }
         }
         else
@@ -64,5 +64,19 @@
     private void NavigateToHistory()
     {
         navManager.NavigateTo("/history");
+    }
+
+    private async Task OnForcedRefresh()
+    {
+        var result = await comicManager.GetComicAsync(_comicResponseModel!.Id);
+
+        if (result.Succeeded)
+        {
+            _comicResponseModel = result.Data;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
     }
 }

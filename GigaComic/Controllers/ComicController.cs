@@ -157,7 +157,9 @@ namespace GigaComic.Controllers
                 if (comic is null || comic.UserId != userId)
                     return BlazorNotFound($"Не существует комикса с указанным id.");
 
-                return BlazorOk(_mapper.Map<ComicResponse>(comic));
+                var response = _mapper.Map<ComicResponse>(comic);
+
+                return BlazorOk(response);
             }
             catch (Exception ex)
             {
@@ -192,6 +194,24 @@ namespace GigaComic.Controllers
                 var comicThemes = await _comicService.GetLastComicsThemes(userId);
 
                 return BlazorOk(comicThemes);
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route(ComicEndpoints.RegenerateRawImage)]
+        public async Task<IActionResult> RegenerateRawImage(RegenerateRawImageRequest model)
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var rawImage = await _comicImageGenerationService.RegenerateRawImage(model, userId);
+                var response = _mapper.Map<ComicRawImageResponse>(rawImage);
+
+                return BlazorOk(response);
             }
             catch (Exception ex)
             {

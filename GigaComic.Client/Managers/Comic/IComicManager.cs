@@ -20,5 +20,8 @@ namespace GigaComic.Client.Managers.Comic
         Task<PaginatedResult<ComicResponse>> GetComicsAsync(int page, int pageSize = PageConstants.DefaultPageSize);
 
         Task<IResult<List<string>?>> GetLastComicThemesAsync();
+
+        Task<IResult<ComicRawImageResponse>> RegenerateRawImageAsync(RegenerateRawImageRequest model);
+
     }
 }

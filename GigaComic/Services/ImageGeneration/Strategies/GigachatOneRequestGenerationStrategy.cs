@@ -41,6 +41,8 @@ namespace GigaComic.Services.ImageGeneration.Strategies
                 var kandinskyPrompt = splittedItem.Split(';')[0];
                 var gigaChatDesc = splittedItem.Length > 1 ? splittedItem.Split(';')[1] : kandinskyPrompt;
 
+                gigaChatDesc = gigaChatDesc.Replace("Описание:", "").Trim();
+
                 result.Add(new ComicRawImage()
                 {
                     GeneratingRequest = kandinskyPrompt,

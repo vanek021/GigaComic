@@ -1,4 +1,4 @@
-﻿<button class="@_btnClass" disabled="@_btnDisabled" style="@btnStyle" type="@Type" @onclick="OnClickCallback">
+﻿<button class="@_btnClass" disabled="@IsDisabled" style="@btnStyle" type="@Type" @onclick="OnClickCallback">
     <span class="@GetSpanClass()">
         @if (Icon.HasValue)
         {
@@ -33,6 +33,9 @@
 
     [Parameter]
     public string Style { get; set; }
+
+    [Parameter]
+    public bool IsDisabled { get; set; } = false;
 
     [Parameter]
     public EventCallback OnClickCallback { get; set; }

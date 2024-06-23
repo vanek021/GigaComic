@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Shared", "GigaCom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Core.Server", "GigaComic.Core.Server\GigaComic.Core.Server.csproj", "{B48A7A46-5242-4C8F-8692-24A368F34F8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaComic.Modules.ComicRenderer", "GigaComic.Modules.ComicRenderer\GigaComic.Modules.ComicRenderer.csproj", "{19A0A489-0A0E-46FC-8A63-02C35E462F0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaComic.Modules.ComicRenderer", "GigaComic.Modules.ComicRenderer\GigaComic.Modules.ComicRenderer.csproj", "{19A0A489-0A0E-46FC-8A63-02C35E462F0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

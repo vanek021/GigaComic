@@ -16,7 +16,7 @@
     <div class="content">
         @if (ComicResponseModel != null)
         {
-            <ComicView ComicResponseModel="ComicResponseModel" />
+            <ComicView OnForcedRefresh="OnForcedRefresh" ComicResponseModel="ComicResponseModel" />
         }
         else
         {
@@ -46,5 +46,19 @@
         }
 
         StateHasChanged();
+    }
+
+    private async Task OnForcedRefresh()
+    {
+        var result = await comicManager.GetComicAsync(ComicResponseModel!.Id);
+
+        if (result.Succeeded)
+        {
+            ComicResponseModel = result.Data;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
     }
 }

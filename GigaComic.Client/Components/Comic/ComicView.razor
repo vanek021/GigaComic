@@ -27,7 +27,7 @@
         OnContinueCallback="CompleteComicSetupAsync" />
         break;
     case ComicStage.RawImagesEditing:
-        <RawImagesEditing />
+        <RawImagesEditing OnForcedRefresh="OnForcedRefresh" ComicResponseModel="ComicResponseModel" />
         break;
     case ComicStage.Completed:
         <ComicResult ComicResponseModel="ComicResponseModel" />
@@ -41,6 +41,9 @@
 @code {
     [Parameter]
     public ComicResponse ComicResponseModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnForcedRefresh { get; set; }
 
     private ComicSetupRequest _comicSetupRequest { get; set; } = new();
     private SimpleModal? _errorModal;

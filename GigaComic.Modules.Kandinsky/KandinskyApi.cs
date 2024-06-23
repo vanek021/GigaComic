@@ -45,6 +45,7 @@ public class KandinskyApi
         };
 
         var response = await _httpClient.PostAsync("/key/api/v1/text2image/run", data);
+        var rstr = await response.Content.ReadAsStringAsync();
         return await GetDeserializeObject<GenerateResponse>(response);
     }
 
@@ -59,8 +60,8 @@ public class KandinskyApi
     {
         var generated = await Generate(prompt, modelId, count, width, height, style);
         var uuid = generated.Uuid;
-        var attempts = 20;
-        var wait = 1000;
+        var attempts = 60;
+        var wait = 2000;
 
         while (attempts > 0)
         {

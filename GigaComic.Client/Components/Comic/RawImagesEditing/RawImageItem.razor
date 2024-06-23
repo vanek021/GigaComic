@@ -1,0 +1,49 @@
+﻿@using GigaComic.Infrastructure.Extensions
+@using GigaComic.Models.Enums
+@using GigaComic.Shared.Responses.Comic
+
+@inject IConfiguration configuration
+
+@if (RawImage.State == RawImageState.Created)
+{
+    <div @onclick="@(_ => OnClick.InvokeAsync(RawImage))" class="raw-preview-item">
+        <Skeleton Class="skeleton__raw-image" Active="true" Avatar="true" Paragraph="false" Title="false" AvatarShape="round" />
+        <Skeleton ParagraphRows="1" Class="raw-preview-title" Active="true" Paragraph="false" Title="true" Avatar="false"></Skeleton>
+    </div>
+}
+else if (RawImage.State == RawImageState.Processed)
+{
+    <div @onclick="@(_ => OnClick.InvokeAsync(RawImage))" class="@(IsSelected ? "raw-preview-item raw-preview-item__selected" : "raw-preview-item")">
+        <Image Class="raw-preview__image" Preview="false" Src="@($"{_apiUrl}{RawImage.PublicUrl}")" />
+        <span class="raw-preview__title">@RawImage.Title.BreakByMaxLength(50)</span>
+    </div>
+}
+else
+{
+    <div @onclick="@(_ => OnClick.InvokeAsync(RawImage))" class="@(IsSelected ? "raw-preview-item raw-preview-item__selected" : "raw-preview-item")">
+        <Image Class="raw-preview__image" Preview="false" Src="/images/unknown-image.png" />
+        <span class="raw-preview__title"><Icon Style="display: inline !important;" Type="close-circle" Theme="twotone" TwotoneColor="#fc2c03" Height="16px" Width="16px" /> @RawImage.Title.BreakByMaxLength(50)</span>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public ComicRawImageResponse RawImage { get; set; }
+
+    [Parameter]
+    public EventCallback<ComicRawImageResponse> OnClick { get; set; }
+
+    [Parameter]
+    public bool IsSelected { get; set; }
+
+    [Parameter]
+    public ComicRawImageResponse SelectedRawImage { get; set; }
+
+    private string? _apiUrl;
+
+    protected override Task OnInitializedAsync()
+    {
+        _apiUrl = configuration["apiUrl"];
+        return base.OnInitializedAsync();
+    }
+}
