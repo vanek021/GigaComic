@@ -1,0 +1,14 @@
+﻿<div>
+    <Steps Style="margin-top: 40px; margin-bottom: 40px;" Current="CurrentStep" Class="site-navigation-steps">
+        <Step Title="Создание темы" />
+        <Step Title="Редактирование тезисов" />
+        <Step Title="Редактирование истории" />
+        <Step Title="Редактирование изображений" />
+        <Step Title="Результат" />
+    </Steps>
+</div>
+
+@code {
+    [Parameter]
+    public int CurrentStep { get; set; }
+}

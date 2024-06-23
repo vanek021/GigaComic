@@ -1312,7 +1312,7 @@ a.button {
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid lightgray;
     height: 100%;
     padding: 20px;
     height: 80vh;
@@ -1355,7 +1355,7 @@ a.button {
 }
 
 .raw-extended-container {
-    border: 1px solid black;
+    border: 1px solid lightgray;
     height: 80vh;
     display: flex;
     flex-direction: row;
