@@ -36,14 +36,14 @@
                                         <Image Preview="false" Src="@($"{_apiUrl}{_selectedRawImage.PublicUrl}")" />
                                         break;
                                     case RawImageState.Fail:
-                                        <Image Class="raw-failed-image" Preview="false" Src="/images/unknown-image.png" />
+                                        <Image Class="raw-failed-image" Preview="false" Src="/images/unknown-image.svg" />
                                         break;
                                     default:
                                         throw new ArgumentException();
                                 }
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 d-flex">
                             <div class="raw-extended-actions">
                                 @switch (_selectedRawImage.State)
                                 {
@@ -122,6 +122,8 @@
             <ButtonWithLoader IsDisabled="_isRegenerating" Text="Продолжить" />
         </div>
     </div>
+
+    @* <ComicSteps CurrentStep="4" /> *@
 </div>
 
 @code {

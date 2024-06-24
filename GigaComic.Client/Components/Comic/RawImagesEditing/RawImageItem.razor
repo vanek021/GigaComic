@@ -21,7 +21,7 @@ else if (RawImage.State == RawImageState.Processed)
 else
 {
     <div @onclick="@(_ => OnClick.InvokeAsync(RawImage))" class="@(IsSelected ? "raw-preview-item raw-preview-item__selected" : "raw-preview-item")">
-        <Image Class="raw-preview__image" Preview="false" Src="/images/unknown-image.png" />
+        <Image Class="raw-preview__image" Preview="false" Src="/images/unknown-image.svg" />
         <span class="raw-preview__title"><Icon Style="display: inline !important;" Type="close-circle" Theme="twotone" TwotoneColor="#fc2c03" Height="16px" Width="16px" /> @RawImage.Title.BreakByMaxLength(50)</span>
     </div>
 }
