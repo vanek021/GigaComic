@@ -1,4 +1,5 @@
 ﻿using GigaComic.Configurations;
+using GigaComic.Modules.ComicRenderer;
 using GigaComic.Modules.GigaChat;
 using GigaComic.Services;
 using GigaComic.Services.Generation;
@@ -16,6 +17,7 @@ namespace GigaComic.Extensions
             serviceCollection.AddScoped<ComicService>();
             serviceCollection.AddScoped<ComicAbstractService>();
             serviceCollection.AddScoped<ComicImageGenerationService>();
+            serviceCollection.AddScoped<ComicPageRenderer>();
 
             serviceCollection.AddAutoMapper(typeof(AppMappingProfile));
 

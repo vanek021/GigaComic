@@ -223,8 +223,27 @@ namespace GigaComic.Controllers
         [Route(ComicEndpoints.CompleteRawImagesEditingStage)]
         public async Task<IActionResult> CompleteRawImagesEditing(CompleteRawImagesEditingRequest model)
         {
-            // TODO: Саша
-            throw new NotImplementedException();
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var comic = _comicService.Get(model.ComicId);
+
+                if (comic is null || comic.Id != userId)
+                    return BlazorNotFound($"Не существует комикса с указанным id.");
+
+                comic.ComicRawImages = _mapper.Map<List<ComicRawImage>>(model.RawImages);
+
+                var pageUrls = await _comicImageGenerationService.GenerateComicPages(comic);
+
+                return BlazorOk(new ComicResultResponse() 
+                { 
+                    Images = pageUrls.Select(x => new ComicImageResponse() { ImageUrl = x}).ToList() 
+                });
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
         }
     }
 }

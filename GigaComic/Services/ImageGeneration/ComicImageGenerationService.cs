@@ -1,12 +1,17 @@
-﻿using GigaComic.Core.Services.BucketStorage;
+﻿using AutoMapper.Configuration.Annotations;
+using GigaComic.Core.Services.BucketStorage;
 using GigaComic.Data;
 using GigaComic.Models.Entities.Comic;
 using GigaComic.Models.Enums;
+using GigaComic.Modules.ComicRenderer;
 using GigaComic.Modules.GigaChat;
 using GigaComic.Modules.Kandinsky;
 using GigaComic.Services.ImageGeneration.Strategies;
 using GigaComic.Shared.Requests.Comic;
 using Microsoft.EntityFrameworkCore;
+using PagedList;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace GigaComic.Services.Generation
 {
@@ -16,14 +21,16 @@ namespace GigaComic.Services.Generation
         private readonly KandinskyApi _kandinskyApi;
         private readonly GigaChatClient _chatClient;
         private readonly IBucket _bucket;
+        private readonly ComicPageRenderer _comicRenderer;
 
-        public ComicImageGenerationService(AppDbContext appDbCtx, KandinskyApi kandinskyApi, IBucketStorageService bucketStorageService, GigaChatClient chatClient)
+        public ComicImageGenerationService(AppDbContext appDbCtx, KandinskyApi kandinskyApi, IBucketStorageService bucketStorageService, GigaChatClient chatClient, ComicPageRenderer comicRenderer)
             : base(appDbCtx)
         {
             _appDbCtx = appDbCtx;
             _kandinskyApi = kandinskyApi;
             _bucket = bucketStorageService.GetBucket("comic");
             _chatClient = chatClient;
+            _comicRenderer = comicRenderer;
         }
 
         public async Task PrepareRawImages(Comic comic)
@@ -101,6 +108,41 @@ namespace GigaComic.Services.Generation
             await _appDbCtx.SaveChangesAsync();
 
             return pendingImage;
+        }
+
+        public async Task<string[]> GenerateComicPages(Comic comic)
+        {
+            var rawImages = comic.ComicRawImages;
+            var bitmaps = new List<Bitmap>();
+            using var stream = new MemoryStream();
+
+            foreach (var rawImage in rawImages)
+            {
+                _bucket.ReadObject(rawImage.PublicUrl, stream);
+                bitmaps.Add(new Bitmap(stream));
+                stream.Flush();
+            }
+
+            var urls = new List<string>();
+            var c = 0;
+            for (int i = 0; i < bitmaps.Count;)
+            {
+                var step = bitmaps.Count - i + 1 >= 4 ? 4 : bitmaps.Count - i + 1 >= 3 ? 3 : 1;
+                var layout = step == 4 ? PageLayouts.Layout4 : step == 3 ? PageLayouts.Layout3 : PageLayouts.Layout1;
+                var page = _comicRenderer.RenderPage(bitmaps.Skip(i).Take(step).ToArray(),
+                    rawImages.Skip(i).Take(step).Select(o => o.Title).ToArray(), layout);
+                page.Save(stream, ImageFormat.Png);
+                _bucket.WriteObject(BuildPageUrl(c++, comic), stream);
+                stream.Flush();
+
+                i += step;
+            }
+            return urls.ToArray();
+        }
+
+        private string BuildPageUrl(int counter, Comic comic)
+        {
+            return Path.Combine($"comic{comic.Id}", $"pages", $"page{counter}.png");
         }
     }
 }

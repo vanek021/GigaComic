@@ -3,9 +3,9 @@ using System.Drawing;
 
 namespace GigaComic.Modules.ComicRenderer
 {
-    public class ComicRenderer
+    public class ComicPageRenderer
     {
-        public Bitmap BuildPage(Bitmap[] images, string[] texts, PageLayout layout)
+        public Bitmap RenderPage(Bitmap[] images, string[] texts, PageLayout layout)
         {
             if (images.Length != layout.ImagesCount)
                 throw new ArgumentException("Количество переданных изображений не совпадает с лэйаутом");
