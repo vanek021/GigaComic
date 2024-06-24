@@ -228,7 +228,7 @@ namespace GigaComic.Controllers
                 var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
                 var comic = _comicService.Get(model.ComicId);
 
-                if (comic is null || comic.Id != userId)
+                if (comic is null || comic.UserId != userId)
                     return BlazorNotFound($"Не существует комикса с указанным id.");
 
                 comic.ComicRawImages = _mapper.Map<List<ComicRawImage>>(model.RawImages);
@@ -239,6 +239,28 @@ namespace GigaComic.Controllers
                 { 
                     Images = pageUrls.Select(x => new ComicImageResponse() { ImageUrl = x}).ToList() 
                 });
+            }
+            catch (Exception ex)
+            {
+                return BlazorBadRequest(ex.Message);
+            }
+        }
+        
+        [HttpPost]
+        [Route(ComicEndpoints.SavePdf)]
+        public async Task<IActionResult> SavePdf(SavePdfRequest model)
+        {
+            try
+            {
+                var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                var comic = _comicService.Get(model.ComicId);
+
+                if (comic is null || comic.UserId != userId)
+                    return BlazorNotFound($"Не существует комикса с указанным id.");
+
+                await _comicService.SavePdf(comic);
+
+                return BlazorOk();
             }
             catch (Exception ex)
             {

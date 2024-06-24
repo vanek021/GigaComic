@@ -118,7 +118,7 @@ namespace GigaComic.Services.Generation
 
             foreach (var rawImage in rawImages)
             {
-                _bucket.ReadObject(rawImage.PublicUrl, stream);
+                _bucket.ReadObject("F:/atmts/Roflans/_Programming/.NetProjects/GigaComic/GigaComic/wwwroot" + rawImage.PublicUrl, stream);
                 bitmaps.Add(new Bitmap(stream));
                 stream.Flush();
             }

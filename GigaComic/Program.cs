@@ -14,7 +14,7 @@ using System.Net.Http;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+var connectionString = "Host=localhost;Port=5432;Username=postgres;Password=qwerty321;Database=gigacomic-dev;Pooling=true";
 
 builder.Services.AddBasePgsqlContext<AppDbContext>(connectionString);
 builder.Services.RegisterInjectableTypesFromAssemblies(typeof(Program), typeof(AppDbContext));

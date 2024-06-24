@@ -50,26 +50,26 @@ namespace GigaComic.Services
             var j = 0;
             var retryCount = 5;
 
-            //while ((plots.Count < abstracts.Count || 
-            //    plots.Any(p => abstracts.Any(a => a.Name == p))) &&
-            //    j < retryCount)
-            //{
-            //    //var prompt = "Сюжетов должно быть 5 (пять). " +
-            //    //    "Сгенерируй мне 5 (пять) сюжетов каждая в НОВОЙ СТРОКЕ. " +
-            //    //    "Ты молодец у тебя получится";
+            while ((plots.Count < abstracts.Count || 
+                plots.Any(p => abstracts.Any(a => a.Name == p))) &&
+                j < retryCount)
+            {
+                var prompt = $"Сюжетов должно быть {abstracts.Count}. " +
+                    $"Сгенерируй мне {abstracts.Count} сюжетов каждая в НОВОЙ СТРОКЕ. " +
+                    "Ты молодец у тебя получится";
 
-            //    answer = await _chatClient.GenerateAnswer(BuildPromptForPlotAdd(abstracts));
+                answer = await _chatClient.GenerateAnswer(prompt);
 
-            //    plots = answer.Split("\n")
-            //        .Where(x => !string.IsNullOrEmpty(x))
-            //        .ToList();
+                plots = answer.Split("\n")
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .ToList();
 
-            //    j++;
-            //}
+                j++;
+            }
 
-            //if (plots.Count < abstracts.Count ||
-            //    plots.Any(p => abstracts.Any(a => a.Name == p)))
-            //    throw new Exception("Ai vashe kapec dawn");
+            if (plots.Count < abstracts.Count ||
+                plots.Any(p => abstracts.Any(a => a.Name == p)))
+                throw new Exception("Ai vashe kapec dawn");
 
             for (int i = 0; i < abstracts.Count; i++)
             {

@@ -1,14 +1,17 @@
-﻿using AutoMapper;
+﻿using System.Drawing;
+using AutoMapper;
 using GigaComic.Core.Services.BucketStorage;
 using GigaComic.Data;
 using GigaComic.Models.Entities.Comic;
 using GigaComic.Modules.GigaChat;
 using GigaComic.Modules.Kandinsky;
-using GigaComic.Shared.Requests.Comic;
 using GigaComic.Shared.Responses;
 using GigaComic.Shared.Responses.Comic;
 using Microsoft.EntityFrameworkCore;
 using Sakura.AspNetCore;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Image = System.Drawing.Image;
 
 namespace GigaComic.Services
 {
@@ -66,6 +69,60 @@ namespace GigaComic.Services
                 .SingleAsync();
 
             return comic;
+        }
+
+        public async Task SavePdf(Comic comic)
+        {
+            var imagesPath = @$"{Directory.GetCurrentDirectory()}\wwwroot\uploads\comic\comic{comic.Id}\pages";
+            var pdfPath = @$"{Directory.GetCurrentDirectory()}\wwwroot\uploads\comic\comic{comic.Id}\comic.pdf";
+            Document document = new Document(PageSize.A4, 25, 25, 25, 25);
+
+            using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
+            {
+                PdfWriter writer = PdfWriter.GetInstance(document, stream);
+                document.Open();
+
+                // Получение всех файлов изображений из папки
+                string[] imageFiles = Directory.GetFiles(imagesPath, "*.*", SearchOption.TopDirectoryOnly);
+                foreach (string imageFile in imageFiles)
+                {
+                    // Проверка, является ли файл изображением
+                    if (IsImageFile(imageFile))
+                    {
+                        // Конвертация изображения в iTextSharp.image
+                        using (FileStream imageStream = new FileStream(imageFile, FileMode.Open, FileAccess.Read))
+                        {
+                            iTextSharp.text.Image pdfImage = iTextSharp.text.Image.GetInstance(imageStream);
+
+                            // Изменение размера изображения для размещения на странице
+                            pdfImage.ScaleToFit(document.PageSize.Width - document.LeftMargin - document.RightMargin,
+                                document.PageSize.Height - document.TopMargin - document.BottomMargin);
+                            pdfImage.Alignment = Element.ALIGN_CENTER;
+                            document.Add(pdfImage);
+                            document.NewPage();
+                        }
+                    }
+                }
+
+                document.Close();
+                writer.Close();
+            }
+        }
+        
+        static bool IsImageFile(string filePath)
+        {
+            try
+            {
+                using (Image img = Image.FromFile(filePath))
+                {
+                }
+                return true;
+            }
+            catch (OutOfMemoryException)
+            {
+                // Файл не является изображением
+                return false;
+            }
         }
     }
 }
