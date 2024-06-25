@@ -71,13 +71,13 @@ namespace GigaComic.Services
             return comic;
         }
 
-        public async Task SavePdf(Comic comic)
+        public async Task<DownloadPdfInfo> SavePdf(Comic comic)
         {
             var imagesPath = @$"{Directory.GetCurrentDirectory()}\wwwroot\uploads\comic\comic{comic.Id}\pages";
             var pdfPath = @$"{Directory.GetCurrentDirectory()}\wwwroot\uploads\comic\comic{comic.Id}\comic.pdf";
             Document document = new Document(PageSize.A4, 25, 25, 25, 25);
 
-            using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
+            await using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
             {
                 PdfWriter writer = PdfWriter.GetInstance(document, stream);
                 document.Open();
@@ -106,6 +106,10 @@ namespace GigaComic.Services
 
                 document.Close();
                 writer.Close();
+                
+                var pdfBytes = File.ReadAllBytes(pdfPath);
+
+                return new DownloadPdfInfo(pdfBytes, "application/pdf");
             }
         }
         
@@ -124,5 +128,18 @@ namespace GigaComic.Services
                 return false;
             }
         }
+    }
+    
+    public class DownloadPdfInfo
+    {
+        public DownloadPdfInfo(byte[] content, string contentType)
+        {
+            this.Content = content;
+            ContentType = contentType;
+        }
+
+        public readonly byte[] Content;
+
+        public string ContentType { get; set; }
     }
 }

@@ -64,7 +64,7 @@ namespace GigaComic.Services.Generation
 
         public string GetPathForRawImage(Comic comic, ComicRawImage rawImage)
         {
-            return Path.Combine($"comic{comic.Id}", $"rawImages", $"rawImage{rawImage.Id}.png");
+            return Path.Combine($"comic{comic.Id}", $"rawImages", $"{Path.GetRandomFileName()}.png");
         }
 
         public async Task<ComicRawImage> RegenerateRawImage(RegenerateRawImageRequest model, long userId)
