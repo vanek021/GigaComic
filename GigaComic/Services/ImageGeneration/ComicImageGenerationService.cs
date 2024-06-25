@@ -9,6 +9,7 @@ using GigaComic.Modules.Kandinsky;
 using GigaComic.Services.ImageGeneration.Strategies;
 using GigaComic.Shared.Requests.Comic;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto.Macs;
 using PagedList;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -46,9 +47,18 @@ namespace GigaComic.Services.Generation
                 .Include(c => c.Comic)
                 .ToList();
 
-            foreach (var pendingImage in pendingRawIamges)
+            for (int i = 0; i < pendingRawIamges.Count;)
             {
-                await GenerateRawImage(pendingImage);
+                using var stream = new MemoryStream();
+                var step = pendingRawIamges.Count - i >= 4 ? 4 : pendingRawIamges.Count - i >= 3 ? 3 : 1;
+                var layout = step == 4 ? PageLayouts.Layout4 : step == 3 ? PageLayouts.Layout3 : PageLayouts.Layout1;
+
+                for (int j = 0; j < step; j++)
+                {
+                    await GenerateRawImage(pendingRawIamges[i + j], layout.ImageSizes[j]);
+                }
+
+                i += step;
             }
         }
 
@@ -61,20 +71,42 @@ namespace GigaComic.Services.Generation
         {
             var rawImage = DbContext.ComicRawImages.SingleOrDefault(c => c.Id == model.Id && c.Comic.UserId == userId);
 
+            var imagesCount = rawImage.Comic.ComicRawImages.Count;
+            var size = Size.Empty;
+            for (int i = 0; i < imagesCount;)
+            {
+                var step = imagesCount - i >= 4 ? 4 : imagesCount - i >= 3 ? 3 : 1;
+                var layout = step == 4 ? PageLayouts.Layout4 : step == 3 ? PageLayouts.Layout3 : PageLayouts.Layout1;
+
+                for (int j = 0; j < step; j++)
+                {
+                    if (i + j == rawImage.Order + 1)
+                    {
+                        size = layout.ImageSizes[j];
+                        break;
+                    }
+                }
+
+                i += step;
+            }
+
             if (rawImage == null)
                 throw new ArgumentNullException("Не удалось обновить указанную картинку");
 
             rawImage.GeneratingRequest = model.GeneratingRequest;
 
-            rawImage = await GenerateRawImage(rawImage);
+            rawImage = await GenerateRawImage(rawImage, size);
             return rawImage;
         }
 
-        private async Task<ComicRawImage> GenerateRawImage(ComicRawImage pendingImage)
+        private async Task<ComicRawImage> GenerateRawImage(ComicRawImage pendingImage, Size imageSize)
         {
             try
             {
-                var result = await _kandinskyApi.GenerateAndWait(pendingImage.GeneratingRequest, style: pendingImage.Comic.Style);
+                var result = await _kandinskyApi.GenerateAndWait(pendingImage.GeneratingRequest, 
+                    style: pendingImage.Comic.Style, 
+                    width: imageSize.Width, 
+                    height: imageSize.Height);
                 if (result.Censored)
                 {
                     pendingImage.IsCensored = true;
@@ -112,8 +144,9 @@ namespace GigaComic.Services.Generation
 
         public async Task<string[]> GenerateComicPages(Comic comic)
         {
-            var rawImages = comic.ComicRawImages;
+            var rawImages = comic.ComicRawImages.OrderBy(x => x.Order).ToList();
             var bitmaps = new List<Bitmap>();
+
 
             foreach (var rawImage in rawImages)
             {
@@ -133,6 +166,7 @@ namespace GigaComic.Services.Generation
                 var page = _comicRenderer.RenderPage(bitmaps.Skip(i).Take(step).ToArray(),
                     rawImages.Skip(i).Take(step).Select(o => o.Title).ToArray(), layout);
                 page.Save(stream, ImageFormat.Png);
+                urls.Add(BuildPageUrl(c, comic));
                 stream.Position = 0;
                 _bucket.WriteObject(BuildPageUrl(c++, comic), stream);
 

@@ -16,16 +16,16 @@ namespace GigaComic.Modules.ComicRenderer
             using var g = Graphics.FromImage(page);
 
             for (int i = 0; i < images.Length; i++)
-                g.DrawImage(images[i], layout.ImagesPlacement[i]);
+                g.DrawImage(images[i], layout.ImagePlacements[i]);
 
             var font = new Font(FontFamily.GenericSerif, 32);
             var format = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
             for (int i = 0; i < texts.Length; i++)
             {
-                var adjFont = GetAdjustedFont(g, texts[i], font, layout.TextsPlacement[i].Size, 54, 12, true, format);
+                var adjFont = GetAdjustedFont(g, texts[i], font, layout.TextPlacements[i].Size, 54, 12, true, format);
                 g.DrawString(texts[i],
                     adjFont,
-                    Brushes.Black, layout.TextsPlacement[i], format);
+                    Brushes.Black, layout.TextPlacements[i], format);
             }
 
             return page;

@@ -7,7 +7,8 @@ namespace GigaComic.Modules.ComicRenderer
         public int ImagesCount { get; set; }
         public int TextsCount { get; set; }
         public Bitmap Template { get; set; }
-        public Point[] ImagesPlacement { get; set; }
-        public Rectangle[] TextsPlacement { get; set; }
+        public Point[] ImagePlacements { get; set; }
+        public Size[] ImageSizes { get; set; }
+        public Rectangle[] TextPlacements { get; set; }
     }
 }

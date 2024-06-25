@@ -19,5 +19,7 @@ namespace GigaComic.Shared.Responses.Comic
         [JsonIgnore]
         public List<ComicAbstractResponse> NotActiveAbstracts => ComicAbstracts.Where(a => !a.IsActive).ToList();
 
+        public List<ComicImageResponse> ComicImageResponses { get; set; } = new();
+
     }
 }

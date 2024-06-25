@@ -235,10 +235,14 @@ namespace GigaComic.Controllers
 
                 var pageUrls = await _comicImageGenerationService.GenerateComicPages(comic);
 
-                return BlazorOk(new ComicResultResponse() 
-                { 
-                    Images = pageUrls.Select(x => new ComicImageResponse() { ImageUrl = x}).ToList() 
-                });
+                comic.Stage = ComicStage.Completed;
+                _comicService.Update(comic);
+                _comicService.SaveChanges();
+
+                var response = _mapper.Map<ComicResponse>(comic);
+                response.ComicImageResponses = pageUrls.Select(x => new ComicImageResponse() { ImageUrl = x }).ToList();
+
+                return BlazorOk(response);
             }
             catch (Exception ex)
             {
