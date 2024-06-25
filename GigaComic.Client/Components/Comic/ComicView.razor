@@ -24,10 +24,12 @@
     case ComicStage.ComicSetup:
         <ComicSetup ComicResponseModel="ComicResponseModel"
                     ComicSetupRequestModel="_comicSetupRequest"
-        OnContinueCallback="CompleteComicSetupAsync" />
+                    OnContinueCallback="CompleteComicSetupAsync" />
         break;
     case ComicStage.RawImagesEditing:
-        <RawImagesEditing OnForcedRefresh="OnForcedRefresh" ComicResponseModel="ComicResponseModel" />
+        <RawImagesEditing OnContinue="CompleteComicRawImagesAsync"
+                          OnForcedRefresh="OnForcedRefresh"
+                          ComicResponseModel="ComicResponseModel" />
         break;
     case ComicStage.Completed:
         <ComicResult ComicResponseModel="ComicResponseModel" />
@@ -104,6 +106,41 @@
         {
             ComicResponseModel = result.Data;
             _comicSetupRequest.ComicId = result.Data.Id;
+        }
+        else
+        {
+            _errorModal!.ShowError(result.GetMessages());
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task CompleteComicRawImagesAsync()
+    {
+        var request = new CompleteRawImagesEditingRequest()
+        {
+            ComicId = ComicResponseModel.Id,
+        };
+
+        foreach (var img in ComicResponseModel.ComicRawImages)
+        {
+            request.RawImages.Add(new RawImageRequest()
+            {
+                GeneratingRequest = img.GeneratingRequest,
+                Id = img.Id,
+                Order = img.Order,
+                Title = img.Title,
+                IsCensored = img.IsCensored,
+                PublicUrl = img.PublicUrl,
+                State = img.State
+            });
+        }
+
+        var result = await comicManager.CompleteRawImagesEditingStageAsync(request);
+
+        if (result.Succeeded)
+        {
+            ComicResponseModel = result.Data;
         }
         else
         {

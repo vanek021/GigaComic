@@ -24,6 +24,13 @@ namespace GigaComic.Client.Managers.Comic
             return result;
         }
 
+        public async Task<IResult<ComicResponse>> CompleteRawImagesEditingStageAsync(CompleteRawImagesEditingRequest model)
+        {
+            var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteRawImagesEditingStage, model);
+            var result = await response.ToResultAsync<ComicResponse>();
+            return result;
+        }
+
         public async Task<IResult<ComicResponse>> CompleteSetupStageAsync(ComicSetupRequest model)
         {
             var response = await _httpClient.PostAsJsonAsync(ComicEndpoints.CompleteSetupStage, model);

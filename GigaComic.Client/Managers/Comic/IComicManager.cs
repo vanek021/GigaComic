@@ -13,6 +13,8 @@ namespace GigaComic.Client.Managers.Comic
 
         Task<IResult<ComicResponse>> CompleteStoriesCreationStageAsync(CompleteStoriesCreationRequest model);
 
+        Task<IResult<ComicResponse>> CompleteRawImagesEditingStageAsync(CompleteRawImagesEditingRequest model);
+
         Task<IResult<ComicResponse>> CompleteSetupStageAsync(ComicSetupRequest model);
 
         Task<IResult<ComicResponse>> GetComicAsync(long id);
@@ -22,6 +24,5 @@ namespace GigaComic.Client.Managers.Comic
         Task<IResult<List<string>?>> GetLastComicThemesAsync();
 
         Task<IResult<ComicRawImageResponse>> RegenerateRawImageAsync(RegenerateRawImageRequest model);
-
     }
 }

@@ -102,7 +102,7 @@
 
     <div class="comic-container__actions">
         <div class="comic-container__actions-info">
-            @if (ComicResponseModel!.ComicRawImages.Any(c => c.State == RawImageState.Created || c.State == RawImageState.Fail))
+            @if (AnyWithoutImage)
             {
                 <Alert Type="@AlertType.Error"
                        Style="height: 42px; margin-bottom: 20px;"
@@ -110,7 +110,7 @@
                        Description="Ошибка: не все изображения были успешно сгенерированы. Проверьте список изображений." />
             }
 
-            @if (ComicResponseModel!.ComicRawImages.Any(c => string.IsNullOrEmpty(c.Title)))
+            @if (AnyImageWithoutTitle)
             {
                 <Alert Type="@AlertType.Error"
                        Style="height: 42px;"
@@ -119,7 +119,7 @@
             }
         </div>
         <div>
-            <ButtonWithLoader IsDisabled="_isRegenerating" Text="Продолжить" />
+            <ButtonWithLoader @ref="_continueBtn" OnClickCallback="Continue" IsDisabled="_isRegenerating || !IsImagesReady" Text="Продолжить" />
         </div>
     </div>
 
@@ -133,11 +133,20 @@
     [Parameter]
     public EventCallback OnForcedRefresh { get; set; }
 
+    [Parameter]
+    public EventCallback OnContinue { get; set; }
+
     private ComicRawImageResponse? _selectedRawImage;
     private ButtonWithLoader? _regenerateBtn;
+    private ButtonWithLoader? _continueBtn;
     private bool _isRegenerating = false;
     private string? _apiUrl;
     private Timer? _timer;
+
+    private bool AnyImageWithoutTitle => ComicResponseModel!.ComicRawImages.Any(c => string.IsNullOrEmpty(c.Title));
+    private bool AnyWithoutImage => ComicResponseModel!.ComicRawImages.Any(c => c.State == RawImageState.Created || c.State == RawImageState.Fail);
+
+    private bool IsImagesReady => !AnyImageWithoutTitle && !AnyWithoutImage;
 
     protected override Task OnInitializedAsync()
     {
@@ -236,5 +245,14 @@
     {
         _selectedRawImage = rawImage;
         StateHasChanged();
+    }
+
+    private async Task Continue()
+    {
+        _continueBtn!.MarkAsLoading();
+
+        await OnContinue.InvokeAsync();
+
+        _continueBtn!.MarkAsDefault();
     }
 }
