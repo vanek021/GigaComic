@@ -80,7 +80,7 @@ namespace GigaComic.Services.Generation
 
                 for (int j = 0; j < step; j++)
                 {
-                    if (i + j == rawImage.Order + 1)
+                    if (i + j == rawImage.Order)
                     {
                         size = layout.ImageSizes[j];
                         break;
@@ -151,7 +151,8 @@ namespace GigaComic.Services.Generation
             foreach (var rawImage in rawImages)
             {
                 using var stream = new MemoryStream();
-                _bucket.ReadObject(GetPathForRawImage(comic, rawImage), stream);
+                var path = Path.Combine($"comic{comic.Id}", $"rawImages", $"{Path.GetFileName(rawImage.PublicUrl)}");
+                _bucket.ReadObject(path, stream);
                 stream.Position = 0;
                 bitmaps.Add(new Bitmap(stream));
             }
