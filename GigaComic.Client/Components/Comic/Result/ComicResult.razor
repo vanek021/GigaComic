@@ -1,6 +1,7 @@
 ﻿@using GigaComic.Shared.Responses.Comic
 
 @inject IJSRuntime js
+@inject IConfiguration configuration
 
 <h2 class="content__title">Вот, что получилось:</h2>
 
@@ -8,21 +9,14 @@
     <div class="swiper-button-prev"></div>
     <div class="swiper">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <a data-lightbox="comic" href="/images/slide-example.png">
-                    <img src="/images/slide-example.png" />
-                </a>
-            </div>
-            <div class="swiper-slide">
-                <a data-lightbox="comic" href="/images/slide-example.png">
-                    <img src="/images/slide-example.png" />
-                </a>
-            </div>
-            <div class="swiper-slide">
-                <a data-lightbox="comic" href="/images/slide-example.png">
-                    <img src="/images/slide-example.png" />
-                </a>
-            </div>
+            @foreach (var page in ComicResponseModel!.ComicImageResponses)
+            {
+                <div class="swiper-slide">
+                    <a data-lightbox="comic" href="@($"{_apiUrl}{page.ImageUrl}")">
+                        <img src="@($"{_apiUrl}{page.ImageUrl}")" />
+                    </a>
+                </div>
+            }
         </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -38,6 +32,14 @@
 @code {
     [Parameter]
     public ComicResponse? ComicResponseModel { get; set; }
+
+    private string? _apiUrl;
+
+    protected override Task OnInitializedAsync()
+    {
+        _apiUrl = configuration["apiUrl"];
+        return base.OnInitializedAsync();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
