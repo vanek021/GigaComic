@@ -14,6 +14,8 @@ COPY ["GigaComic.Models/GigaComic.Models.csproj", "GigaComic.Models/"]
 COPY ["GigaComic.Shared/GigaComic.Shared.csproj", "GigaComic.Shared/"]
 COPY ["GigaComic.Modules.GigaChat/GigaComic.Modules.GigaChat.csproj", "GigaComic.Modules.GigaChat/"]
 COPY ["GigaComic.Modules.Kandinsky/GigaComic.Modules.Kandinsky.csproj", "GigaComic.Modules.Kandinsky/"]
+COPY ["GigaComic.Modules.ComicRenderer/GigaComic.Modules.ComicRenderer.csproj", "GigaComic.Modules.ComicRenderer/"]
+
 
 RUN dotnet restore "GigaComic/GigaComic.csproj"
 COPY . .

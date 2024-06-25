@@ -167,7 +167,7 @@ namespace GigaComic.Services.Generation
                 var page = _comicRenderer.RenderPage(bitmaps.Skip(i).Take(step).ToArray(),
                     rawImages.Skip(i).Take(step).Select(o => o.Title).ToArray(), layout);
                 page.Save(stream, ImageFormat.Png);
-                urls.Add(BuildPageUrl(c, comic));
+                urls.Add(_bucket.GetPublicURL(BuildPageUrl(c++, comic)));
                 stream.Position = 0;
                 _bucket.WriteObject(BuildPageUrl(c++, comic), stream);
 
