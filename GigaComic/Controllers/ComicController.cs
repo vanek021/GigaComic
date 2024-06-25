@@ -247,8 +247,8 @@ namespace GigaComic.Controllers
         }
         
         [HttpPost]
-        [Route(ComicEndpoints.SavePdf)]
-        public async Task<IActionResult> SavePdf(SavePdfRequest model)
+        [Route(ComicEndpoints.DownloadPdf)]
+        public async Task<IActionResult> DownloadPdf(DownloadPdfRequest model)
         {
             try
             {
@@ -258,9 +258,9 @@ namespace GigaComic.Controllers
                 if (comic is null || comic.UserId != userId)
                     return BlazorNotFound($"Не существует комикса с указанным id.");
 
-                await _comicService.SavePdf(comic);
+                var pdfInfo = await _comicService.SavePdf(comic);
 
-                return BlazorOk();
+                return BlazorOk(File(pdfInfo.Content, pdfInfo.ContentType));
             }
             catch (Exception ex)
             {
