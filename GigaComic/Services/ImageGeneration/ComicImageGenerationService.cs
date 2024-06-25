@@ -114,26 +114,27 @@ namespace GigaComic.Services.Generation
         {
             var rawImages = comic.ComicRawImages;
             var bitmaps = new List<Bitmap>();
-            using var stream = new MemoryStream();
 
             foreach (var rawImage in rawImages)
             {
-                _bucket.ReadObject("F:/atmts/Roflans/_Programming/.NetProjects/GigaComic/GigaComic/wwwroot" + rawImage.PublicUrl, stream);
+                using var stream = new MemoryStream();
+                _bucket.ReadObject(GetPathForRawImage(comic, rawImage), stream);
+                stream.Position = 0;
                 bitmaps.Add(new Bitmap(stream));
-                stream.Flush();
             }
 
             var urls = new List<string>();
-            var c = 0;
+            var c = 1;
             for (int i = 0; i < bitmaps.Count;)
             {
-                var step = bitmaps.Count - i + 1 >= 4 ? 4 : bitmaps.Count - i + 1 >= 3 ? 3 : 1;
+                using var stream = new MemoryStream();
+                var step = bitmaps.Count - i >= 4 ? 4 : bitmaps.Count - i >= 3 ? 3 : 1;
                 var layout = step == 4 ? PageLayouts.Layout4 : step == 3 ? PageLayouts.Layout3 : PageLayouts.Layout1;
                 var page = _comicRenderer.RenderPage(bitmaps.Skip(i).Take(step).ToArray(),
                     rawImages.Skip(i).Take(step).Select(o => o.Title).ToArray(), layout);
                 page.Save(stream, ImageFormat.Png);
+                stream.Position = 0;
                 _bucket.WriteObject(BuildPageUrl(c++, comic), stream);
-                stream.Flush();
 
                 i += step;
             }
